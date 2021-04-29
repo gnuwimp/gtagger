@@ -3,7 +3,7 @@ gTagger is an tag editor for audio files written in Kotlin. <br />
 It can edit common audio tags and file names and also do batch operations on selected tracks.<br />
 
 gTagger uses [JAudioTagger](http://www.jthink.net/jaudiotagger) library for reading and writing of audio files.
-Source [code](https://bitbucket.org/ijabz/jaudiotagger/src/master).
+Source code from [bitbucket](https://bitbucket.org/ijabz/jaudiotagger/src/master).
 JAudioTagger is released under the GNU Lesser General Public License.<br />
 
 You will need [Java](http://java.com) installed to run this program.<br />
