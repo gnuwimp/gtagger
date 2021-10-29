@@ -1,13 +1,14 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.LayoutPanel
 import gnuwimp.swing.Swing
 import gnuwimp.swing.TableHeader
+import gnuwimp.util.numOrZero
 import java.awt.event.MouseEvent
 import javax.swing.*
 import javax.swing.table.AbstractTableModel
@@ -15,7 +16,7 @@ import javax.swing.table.AbstractTableModel
 /**
  * Table for album data.
  */
-class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
+class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2 + 1) {
     private val colSelect       = 0
     private val colTrack        = 1
     private val colArtist       = 2
@@ -24,9 +25,9 @@ class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
     private val colGenre        = 5
     private val colAlbumArtist  = 6
     private val table           = DataTable()
-    private val filterButton    = JButton(Labels.LABEL_FILTER)
-    private val selectButton    = JButton(Labels.LABEL_SELECT_ALL)
-    private val unselectButton  = JButton(Labels.LABEL_SELECT_NONE)
+    private val filterButton    = JButton(Constants.LABEL_FILTER)
+    private val selectButton    = JButton(Constants.LABEL_SELECT_ALL)
+    private val unselectButton  = JButton(Constants.LABEL_SELECT_NONE)
 
     init {
         val scroll = JScrollPane()
@@ -37,14 +38,14 @@ class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
         add(selectButton, x = -42, y = -5, w = 20, h = 4)
         add(unselectButton, x = -21, y = -5, w = 20, h = 4)
 
-        filterButton.toolTipText   = Labels.TOOL_SELECT_ALBUM
-        selectButton.toolTipText   = Labels.TOOL_SELECT_ALL
-        unselectButton.toolTipText = Labels.TOOL_SELECT_NONE
+        filterButton.toolTipText   = Constants.TOOL_SELECT_ALBUM
+        selectButton.toolTipText   = Constants.TOOL_SELECT_ALL
+        unselectButton.toolTipText = Constants.TOOL_SELECT_NONE
 
         //----------------------------------------------------------------------
         // Search and select tracks
         filterButton.addActionListener {
-            val answer = JOptionPane.showInputDialog(Main.window, Labels.MESSAGE_ASK_FILTER_ALBUM, Labels.DIALOG_FILTER, JOptionPane.YES_NO_OPTION)
+            val answer = JOptionPane.showInputDialog(Main.window, Constants.MESSAGE_ASK_FILTER_ALBUM, Constants.DIALOG_FILTER, JOptionPane.YES_NO_OPTION)
 
             if (answer.isNullOrBlank() == false) {
                 Data.filterOnAlbums(answer)
@@ -66,9 +67,9 @@ class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
         //----------------------------------------------------------------------
         // Create data model for table, show album info, one row per track
         table.model = object : AbstractTableModel() {
-            override fun getColumnClass(column: Int): Class<Any> = when (column) {
-                colSelect -> true.javaClass
-                else -> "".javaClass
+            override fun getColumnClass(column: Int) = when (column) {
+                colSelect -> java.lang.Boolean::class.java
+                else -> java.lang.String::class.java
             }
 
             //------------------------------------------------------------------
@@ -76,13 +77,13 @@ class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
 
             //------------------------------------------------------------------
             override fun getColumnName(column: Int): String = when (column) {
-                colSelect -> Labels.LABEL_SELECT
-                colTrack -> Labels.LABEL_TRACK
-                colArtist -> Labels.LABEL_ARTIST
-                colAlbum -> Labels.LABEL_ALBUM
-                colTitle -> Labels.LABEL_TITLE
-                colGenre -> Labels.LABEL_GENRE
-                colAlbumArtist -> Labels.LABEL_ALBUM_ARTIST
+                colSelect -> Constants.LABEL_SELECT
+                colTrack -> Constants.LABEL_TRACK
+                colArtist -> Constants.LABEL_ARTIST
+                colAlbum -> Constants.LABEL_ALBUM
+                colTitle -> Constants.LABEL_TITLE
+                colGenre -> Constants.LABEL_GENRE
+                colAlbumArtist -> Constants.LABEL_ALBUM_ARTIST
                 else -> "!"
             }
 
@@ -109,23 +110,58 @@ class TabAlbumTable : LayoutPanel(size = Swing.defFont.size / 2) {
             }
 
             //------------------------------------------------------------------
-            override fun isCellEditable(row: Int, column: Int): Boolean = when(column) {
-                colSelect -> true
-                else -> false
-            }
+            override fun isCellEditable(row: Int, column: Int): Boolean = true
+//            when(column) {
+//                colSelect -> true
+//                colArtist -> true
+//                colAlbum -> true
+//                colArtist -> true
+//                colTitle -> true
+//                else -> false
+//            }
 
             //------------------------------------------------------------------
             override fun setValueAt(value: Any?, row: Int, column: Int) {
                 val track = Data.getTrack(row)
 
-                if (track != null && column == colSelect) {
-                    track.isSelected = value as Boolean
-                    Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                if (track != null) {
+                    if (column == colSelect) {
+                        track.isSelected = value as Boolean
+                        Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                    }
+                    else {
+                        val value2 = value as String
+
+                        if (column == colTrack && value2.numOrZero in 1..9999 && value2 != track.track) {
+                            track.track = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                        else if (column == colArtist && value2 != track.artist) {
+                            track.artist = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                        else if (column == colAlbum && value2 != track.album) {
+                            track.album = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                        else if (column == colTitle && value2 != track.title) {
+                            track.title = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                        else if (column == colGenre && value2 != track.genre) {
+                            track.genre = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                        else if (column == colAlbumArtist && value2 != track.albumArtist) {
+                            track.albumArtist = value2
+                            Data.sendUpdate(TrackEvent.ITEM_DIRTY)
+                        }
+                    }
                 }
             }
         }
 
-        table.tableHeader.toolTipText = Labels.TOOL_TABLE_HEAD
+        table.tableHeader.toolTipText = Constants.TOOL_TABLE_HEAD
         table.setColumnWidth(colSelect, min = 50, pref = 50, max = 100)
         table.setColumnWidth(colTrack, min = 50, pref = 50, max = 100)
         table.setColumnWidth(colArtist, min = 50, pref = 300, max = 10000)

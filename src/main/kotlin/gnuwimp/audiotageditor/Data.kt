@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.ImageFileDialog
 import gnuwimp.swing.Swing
@@ -16,6 +16,22 @@ import java.util.prefs.Preferences
 import javax.imageio.ImageIO
 import javax.swing.ImageIcon
 import javax.swing.JOptionPane
+
+/**
+ * True if file is an audio file
+ * Only extension is checked
+ */
+val File.isAudio: Boolean
+    get() {
+        val lower = extension.lowercase()
+
+        return if (isFile == false) {
+            false
+        }
+        else {
+            lower == "mp3" || lower == "flac" || lower == "m4a" || lower == "m4b" || lower == "ogg" || lower == "wav" || lower == "wma"
+        }
+    }
 
 /**
  * Data object that loads and saves audio tracks.
@@ -35,6 +51,7 @@ object Data {
         TITLE,
         SELECTED,
         TRACK,
+        EXTENSION,
     }
 
     /**
@@ -135,23 +152,22 @@ object Data {
     }
 
     /**
-     * Delete current selected track.
-     * [TrackEvent.LIST_UPDATED] is sent if track is deleted.
+     * Delete selected tracks.
+     * [TrackEvent.LIST_UPDATED] is sent if tracks is deleted.
      */
-    fun deleteTrack() {
-        val track = selectedTrack
+    fun deleteTracks() {
+        val list = mutableListOf<Track>()
 
-        if (track != null) {
-            val list = tracks.toMutableList()
-
-            if (track.delete()) {
-                list.removeAt(selectedRow)
-
-                tracks      = list
-                selectedRow = -1
-
-                sendUpdate(TrackEvent.LIST_UPDATED)
+        tracks.forEach {
+            if (it.isSelected == false || it.delete() == false) {
+                list.add(it)
             }
+        }
+
+        if (list.size != tracks.size) {
+            tracks      = list
+            selectedRow = -1
+            sendUpdate(TrackEvent.LIST_UPDATED)
         }
     }
 
@@ -217,7 +233,7 @@ object Data {
                 throw Exception("")
             }
             else {
-                ImageIO.read(file).toImageIcon(Labels.ICON_SIZE.toDouble())
+                ImageIO.read(file).toImageIcon(Constants.ICON_SIZE.toDouble())
             }
         }
         catch (e: Exception) {
@@ -274,30 +290,38 @@ object Data {
         val tasks = mutableListOf<TaskReadAudio>()
 
         path        = newPath
-        message     = Labels.MESSAGE_LOADING_TRACKS.format(path)
+        message     = Constants.MESSAGE_LOADING_TRACKS.format(path)
         tracks      = listOf()
         selectedRow = -1
 
-        File(path).listFiles()?.filter(File::isAudio)?.forEach { file ->
-            tasks.add(TaskReadAudio(file = file, fileName = file.name))
+        val list = File(path).listFiles()
+
+        if (list != null) {
+            list.sortBy {
+                it.canonicalFile
+            }
+
+            list.filter(File::isAudio).forEach {
+                tasks.add(TaskReadAudio(file = it, fileName = it.name))
+            }
         }
 
         LogManager.getLogManager().reset()
 
         if (tasks.size > 0) {
-            val manager = TaskManager(tasks = tasks, threadCount = 3, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
-            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Labels.DIALOG_TITLE_LOAD, parent = Main.window)
+            val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
+            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_LOAD, parent = Main.window)
 
             dialog.enableCancel = true
             dialog.start()
 
-            val stat = Labels.MESSAGE_TIME.format("${ System.currentTimeMillis() - start}")
+            val stat = Constants.MESSAGE_TIME.format("${ System.currentTimeMillis() - start}")
 
             message = if (tasks.countError == 0) {
-                Labels.MESSAGE_LOADING.format(tasks.tracks.size, path, stat)
+                Constants.MESSAGE_LOADING.format(tasks.tracks.size, path, stat)
             }
             else {
-                Labels.ERROR_LOADING.format(tasks.tracks.size, tasks.countError, path, stat)
+                Constants.ERROR_LOADING.format(tasks.tracks.size, tasks.countError, path, stat)
             }
 
             tracks = tasks.tracks
@@ -367,26 +391,11 @@ object Data {
     }
 
     /**
-     * Remove all tags for current selected track and send [TrackEvent.ITEM_SELECTED].
-     */
-    fun removeTags() {
-        try {
-            selectedTrack?.clear()
-        }
-        catch (e: Exception) {
-            Swing.logMessage = Labels.ERROR_DELETE_TAGS.format(selectedTrack?.fileNameWithExtension)
-            JOptionPane.showMessageDialog(Main.window, Labels.ERROR_DELETE_TAGS1_HTML.format(selectedTrack?.fileNameWithExtension), Labels.DIALOG_CLEAR_FAILED, JOptionPane.ERROR_MESSAGE)
-        }
-        finally {
-            sendUpdate(TrackEvent.ITEM_SELECTED)
-        }
-    }
-
-    /**
      * Remove all tags for current selected tracks and send [TrackEvent.ITEM_DIRTY] and [TrackEvent.ITEM_SELECTED].
      */
     fun removeTagsForAll() {
         var failed = false
+        Track.ERRORS = 0
 
         tracks.filter {
             it.isSelected
@@ -395,7 +404,8 @@ object Data {
                 track.clear()
             }
             catch (e: Exception) {
-                Swing.logMessage = Labels.ERROR_DELETE_TAGS.format(track.fileNameWithExtension)
+                Swing.logMessage = Constants.ERROR_DELETE_TAGS.format(track.fileNameWithExtension)
+                Swing.logMessage = e.message.toString()
                 failed = true
             }
         }
@@ -404,7 +414,10 @@ object Data {
         sendUpdate(TrackEvent.ITEM_SELECTED)
 
         if (failed == true) {
-            JOptionPane.showMessageDialog(Main.window, Labels.ERROR_DELETE_TAGS2_HTML.format(selectedTrack?.fileNameWithExtension), Labels.DIALOG_CLEAR_FAILED, JOptionPane.ERROR_MESSAGE)
+            JOptionPane.showMessageDialog(Main.window, Constants.ERROR_DELETE_TAGS2_HTML.format(selectedTrack?.fileNameWithExtension), Constants.DIALOG_CLEAR_FAILED, JOptionPane.ERROR_MESSAGE)
+        }
+        else if (Track.ERRORS > 0) {
+            JOptionPane.showMessageDialog(Main.window, Constants.ERROR_DELETE_TAGS1_HTML.format(selectedTrack?.fileNameWithExtension), Constants.DIALOG_CLEAR_FAILED, JOptionPane.ERROR_MESSAGE)
         }
     }
 
@@ -467,10 +480,10 @@ object Data {
      */
     fun saveChangedAskFirst(displayErrorDialogOnSave: Boolean, abortOnFailedSave: Boolean): Boolean {
         if (isAnyChangedAndSelected &&
-            JOptionPane.showConfirmDialog(Main.window, Labels.MESSAGE_ASK_SAVE_HTML, Labels.DIALOG_SAVE, JOptionPane.YES_NO_OPTION) == Labels.YES && saveTracks() == false) {
+            JOptionPane.showConfirmDialog(Main.window, Constants.MESSAGE_ASK_SAVE_HTML, Constants.DIALOG_SAVE, JOptionPane.YES_NO_OPTION) == Constants.YES && saveTracks() == false) {
 
             if (displayErrorDialogOnSave == true) {
-                JOptionPane.showMessageDialog(Main.window, Labels.ERROR_SAVE_HTML, Labels.DIALOG_SAVE_FAILED, JOptionPane.ERROR_MESSAGE )
+                JOptionPane.showMessageDialog(Main.window, Constants.ERROR_SAVE_HTML, Constants.DIALOG_SAVE_FAILED, JOptionPane.ERROR_MESSAGE )
             }
 
             if (abortOnFailedSave == true) {
@@ -487,6 +500,8 @@ object Data {
         val start = System.currentTimeMillis()
         val tasks = mutableListOf<TaskSaveAudio>()
 
+        Track.ERRORS = 0
+
         tracks.filter { track ->
             track.isChanged && track.isSelected
         }.forEach { track ->
@@ -494,20 +509,23 @@ object Data {
         }
 
         if (tasks.size > 0) {
-            val manager = TaskManager(tasks = tasks, threadCount = 3, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
-            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Labels.DIALOG_TITLE_SAVE, parent = Main.window)
+            val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
+            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_SAVE, parent = Main.window)
 
             dialog.enableCancel = true
             dialog.start()
 
-            val stat = Labels.MESSAGE_TIME.format("${System.currentTimeMillis() - start}")
+            val stat = Constants.MESSAGE_TIME.format("${System.currentTimeMillis() - start}")
             val row  = selectedRow
 
-            message = if (tasks.countError == 0) {
-                Labels.MESSAGE_SAVING.format(tasks.size, stat)
+            message = if (Track.ERRORS > 0) {
+                Constants.ERROR_SAVING2.format(Track.ERRORS)
+            }
+            else if (tasks.countError > 0) {
+                Constants.ERROR_SAVING1.format(tasks.countOk, tasks.countError, stat)
             }
             else {
-                Labels.ERROR_SAVING.format(tasks.countOk, tasks.countError, stat)
+                Constants.MESSAGE_SAVING.format(tasks.size, stat)
             }
 
             selectedRow = row
@@ -563,6 +581,7 @@ object Data {
                 Sort.TIME -> (track1.time + track1.artist + track1.album + track1.trackWithZeros).compareTo(track2.time + track2.artist + track2.album + track2.trackWithZeros)
                 Sort.TITLE -> (track1.title + track1.artist + track1.album + track1.trackWithZeros).compareTo(track2.title + track2.artist + track2.album + track2.trackWithZeros)
                 Sort.TRACK -> (track1.trackWithZeros + track1.artist + track1.album + track1.trackWithZeros).compareTo(track2.trackWithZeros + track2.artist + track2.album + track2.trackWithZeros)
+                Sort.EXTENSION -> (track1.fileExt + track1.fileName).compareTo(track2.fileExt + track2.fileName)
             }
         }.toMutableList()
 

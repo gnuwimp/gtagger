@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.ComboBox
 import gnuwimp.swing.ImageFileDialog
@@ -19,33 +19,33 @@ import javax.swing.JTextField
 /**
  * Option panel for changing album tags.
  */
-class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.defFont.size / 2) {
-    private val albumArtistCheck = JCheckBox(Labels.LABEL_ALBUM_ARTIST)
+class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.defFont.size / 2 + 1) {
+    private val albumArtistCheck = JCheckBox(Constants.LABEL_ALBUM_ARTIST)
     private val albumArtistInput = JTextField()
-    private val albumCheck       = JCheckBox(Labels.LABEL_ALBUM)
+    private val albumCheck       = JCheckBox(Constants.LABEL_ALBUM)
     private val albumInput       = JTextField()
-    private val applyButton      = JButton(Labels.LABEL_APPLY_CHANGES)
-    private val artistCheck      = JCheckBox(Labels.LABEL_ARTIST)
+    private val applyButton      = JButton(Constants.LABEL_APPLY_CHANGES)
+    private val artistCheck      = JCheckBox(Constants.LABEL_ARTIST)
     private val artistInput      = JTextField()
-    private val commentCheck     = JCheckBox(Labels.LABEL_COMMENT)
+    private val commentCheck     = JCheckBox(Constants.LABEL_COMMENT)
     private val commentInput     = JTextField()
-    private val composerCheck    = JCheckBox(Labels.LABEL_COMPOSER)
+    private val composerCheck    = JCheckBox(Constants.LABEL_COMPOSER)
     private val composerInput    = JTextField()
-    private val copyCheck        = JCheckBox(Labels.LABEL_COPY_ARTIST)
-    private val copyCombo        = ComboBox<String>(Labels.OPTIONS_COPY_ARTIST)
-    private val coverCheck       = JCheckBox(Labels.LABEL_COVER)
+    private val copyCheck        = JCheckBox(Constants.LABEL_COPY_ARTIST)
+    private val copyCombo        = ComboBox<String>(Constants.OPTIONS_COPY_ARTIST)
+    private val coverCheck       = JCheckBox(Constants.LABEL_COVER)
     private val coverIcon        = JLabel()
-    private val encoderCheck     = JCheckBox(Labels.LABEL_ENCODER)
+    private val encoderCheck     = JCheckBox(Constants.LABEL_ENCODER)
     private val encoderInput     = JTextField()
-    private val genreCheck       = JCheckBox(Labels.LABEL_GENRE)
+    private val genreCheck       = JCheckBox(Constants.LABEL_GENRE)
     private val genreCombo       = ComboBox<String>(strings = ID3Genre.strings.sorted())
-    private val loadCoverButton  = JButton(Labels.LABEL_LOAD_IMAGE)
-    private val resetButton      = JButton(Labels.LABEL_RESET)
-    private val saveButton       = JButton(Labels.LABEL_SAVE)
-    private val trackCheck       = JCheckBox(Labels.LABEL_START_TRACK)
+    private val loadCoverButton  = JButton(Constants.LABEL_LOAD_IMAGE)
+    private val resetButton      = JButton(Constants.LABEL_RESET)
+    private val saveButton       = JButton(Constants.LABEL_SAVE)
+    private val trackCheck       = JCheckBox(Constants.LABEL_START_TRACK)
     private val trackInput       = JTextField()
-    private val undoButton       = JButton(Labels.LABEL_UNDO)
-    private val yearCheck        = JCheckBox(Labels.LABEL_SET_YEAR)
+    private val undoButton       = JButton(Constants.LABEL_UNDO)
+    private val yearCheck        = JCheckBox(Constants.LABEL_SET_YEAR)
     private val yearInput        = JTextField()
     private var coverFile: File? = null
 
@@ -94,7 +94,7 @@ class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
 
         yp += 5
         add(coverCheck, x = 1, y = yp, w = lw, h = 4)
-        add(coverIcon, x = lw + 2, y = yp, w = -1, h = (Labels.ICON_SIZE / (Swing.defFont.size / 2)) + 4)
+        add(coverIcon, x = lw + 2, y = yp, w = -1, h = (Constants.ICON_SIZE / (Swing.defFont.size / 2)) + 4)
 
         yp = -25
         add(loadCoverButton, x = 1, y = yp, w = -1, h = 4)
@@ -111,24 +111,24 @@ class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
         yp += 5
         add(saveButton, x = 1, y = yp, w = -1, h = 4)
 
-        albumArtistCheck.toolTipText  = Labels.TOOL_ALBUM_ARTIST
-        albumCheck.toolTipText        = Labels.TOOL_ALBUM
-        applyButton.toolTipText       = Labels.TOOL_APPLY_CHANGES
-        artistCheck.toolTipText       = Labels.TOOL_ARTIST
-        commentCheck.toolTipText      = Labels.TOOL_COMMENT
-        composerCheck.toolTipText     = Labels.TOOL_COMPOSER
-        copyCheck.toolTipText         = Labels.TOOL_COPY_ARTIST
-        coverCheck.toolTipText        = Labels.TOOL_COVER
+        albumArtistCheck.toolTipText  = Constants.TOOL_ALBUM_ARTIST
+        albumCheck.toolTipText        = Constants.TOOL_ALBUM
+        applyButton.toolTipText       = Constants.TOOL_APPLY_CHANGES
+        artistCheck.toolTipText       = Constants.TOOL_ARTIST
+        commentCheck.toolTipText      = Constants.TOOL_COMMENT
+        composerCheck.toolTipText     = Constants.TOOL_COMPOSER
+        copyCheck.toolTipText         = Constants.TOOL_COPY_ARTIST
+        coverCheck.toolTipText        = Constants.TOOL_COVER
         coverIcon.horizontalAlignment = JLabel.LEFT
-        encoderCheck.toolTipText      = Labels.TOOL_ENCODER
-        genreCheck.toolTipText        = Labels.TOOL_GENRE
+        encoderCheck.toolTipText      = Constants.TOOL_ENCODER
+        genreCheck.toolTipText        = Constants.TOOL_GENRE
         genreCombo.isEditable         = true
-        loadCoverButton.toolTipText   = Labels.TOOL_LOAD_IMAGE
-        resetButton.toolTipText       = Labels.TOOL_RESET
-        saveButton.toolTipText        = Labels.TOOL_SAVE
-        trackCheck.toolTipText        = Labels.TOOL_START_TRACK
-        undoButton.toolTipText        = Labels.TOOL_UNDO
-        yearCheck.toolTipText         = Labels.TOOL_SET_YEAR
+        loadCoverButton.toolTipText   = Constants.TOOL_LOAD_IMAGE
+        resetButton.toolTipText       = Constants.TOOL_RESET
+        saveButton.toolTipText        = Constants.TOOL_SAVE
+        trackCheck.toolTipText        = Constants.TOOL_START_TRACK
+        undoButton.toolTipText        = Constants.TOOL_UNDO
+        yearCheck.toolTipText         = Constants.TOOL_SET_YEAR
 
         reset()
 
@@ -216,7 +216,7 @@ class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
         yearCheck.isSelected        = false
         yearInput.text              = ""
         trackCheck.isSelected       = false
-        trackInput.text             = Labels.DEF_START_TRACK
+        trackInput.text             = Constants.DEF_START_TRACK
         commentCheck.isSelected     = false
         commentInput.text           = ""
         composerCheck.isSelected    = false

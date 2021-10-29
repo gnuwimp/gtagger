@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2016 - 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -98,7 +98,7 @@ private class PhotoPreview(fileChooser: JFileChooser) : JComponent() {
 //------------------------------------------------------------------------------
 
 /**
- * A file dialog for choosing a image.
+ * A file dialog for choosing an image.
  * File filter for the most used images is set.
  * And photo preview are turned on.
  */

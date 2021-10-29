@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2016 - 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -26,7 +26,7 @@ fun JTree.copyClosedIconToLeafIcon() {
 //------------------------------------------------------------------------------
 
 /**
- * Store file data for an tree node
+ * Store file data for a tree node
  */
 data class DirData(val file: File) {
     /**
@@ -123,7 +123,7 @@ class DirTree(val dirListener: DirListener) : JPanel(), ActionListener {
 
     /**
      * Callback for popup menu
-     * It will catch eventual exceptions and display it in a error dialog
+     * It will catch eventual exceptions and display it in an error dialog
      */
     override fun actionPerformed(actionEvent: ActionEvent?) {
         try {

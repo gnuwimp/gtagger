@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2016 - 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -92,17 +92,17 @@ fun String.capWords(mode: String): String {
 
         when (mode) {
             "words" -> {
-                if (c.isLetter() && flip) {
+                if (c.isLetter() == true && flip == true) {
                     flip = false
-                    c = c.toUpperCase()
+                    c = c.uppercaseChar()
                 }
-                else if (c.isLetter())
-                    c = c.toLowerCase()
+                else if (c.isLetter() == true)
+                    c = c.lowercaseChar()
                 else
                     flip = true
             }
-            "lower" -> c = c.toLowerCase()
-            "upper" -> c = c.toUpperCase()
+            "lower" -> c = c.lowercaseChar()
+            "upper" -> c = c.uppercaseChar()
         }
 
         value += c
@@ -112,7 +112,7 @@ fun String.capWords(mode: String): String {
 }
 
 /**
- * Return string as an long or 0 if failed
+ * Return string as a long or 0 if failed
  */
 val String.numOrZero: Long
     get() {
@@ -125,7 +125,7 @@ val String.numOrZero: Long
     }
 
 /**
- * Return string as an long or -1 if failed
+ * Return string as a long or -1 if failed
  */
 val String.numOrMinus: Long
     get() {
@@ -171,7 +171,7 @@ val String.removeTrailingNoneLetters: String
 /**
  * Return string as formatted iso date "YYYY-MM-DD" or empty string if date can't be converted or validated
  * Current input formats is "YYYYMMDD", "YYYY-MM-DD", "MMDD", "MM-DD", "DD", ""
- * If date is an partial date it tries to add current year and/or month
+ * If date is a partial date it tries to add current year and/or month
  */
 val String.toIsoDate: String
     get() {
@@ -297,7 +297,7 @@ enum class TimeFormat {
 }
 
 /**
- * Format number of milli seconds to an ISO kind of string
+ * Format number of milliseconds to an ISO kind of string
  */
 fun TimeFormat.format(milliSeconds: Long, timeZone: String = ""): String {
     val date = Date(milliSeconds)
