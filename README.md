@@ -17,10 +17,10 @@ Double-click on the jar file to start the program in windows.
 Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.
 
 ## Screenshots
-<img src="images/audiotageditor.png" width="40%" height="40%"/>
-<img src="images/audiotageditor-2.png" width="40%" height="40%"/>
-<img src="images/audiotageditor-3.png" width="40%" height="40%"/>
-<img src="images/audiotageditor-4.png" width="40%" height="40%"/>
+<img src="images/audiotageditor.png" width="70%" height="70%"/>
+<img src="images/audiotageditor-2.png" width="70%" height="70%"/>
+<img src="images/audiotageditor-3.png" width="70%" height="70%"/>
+<img src="images/audiotageditor-4.png" width="70%" height="70%"/>
 
 ## Changes
 <pre>
