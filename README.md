@@ -24,6 +24,8 @@ Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.
 
 ## Changes
 <pre>
+1.11:   updated Jaudiotagger library and added it to the source tree
+
 1.1:    renamed from gTagger to AudioTagEditor
         ui changes
         bug fixes

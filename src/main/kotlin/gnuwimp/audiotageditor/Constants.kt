@@ -10,23 +10,6 @@ package gnuwimp.audiotageditor
  */
 object Constants {
     const val APP_NAME                    = "AudioTagEditor"
-    const val APP_ABOUT: String           = "<html>" +
-        "<h2>AudioTagEditor 1.1</h2>" +
-
-        "<h3>About</h3>" +
-        "Copyright © 2021 gnuwimp@gmail.com.<br>" +
-        "Released under the GNU General Public License v3.0.<br>" +
-        "See: <a href=\"https://github.com/gnuwimp/AudioTagEditor\">https://github.com/gnuwimp/AudioTagEditor</a><br>" +
-        "<br>" +
-
-        "AudioTagEditor is an audio file tag editor written in Kotlin.<br>" +
-        "Use AudioTagEditor with caution and at your own risk.<br>" +
-        "<br>" +
-
-        "<h3>Following third party software library are used</h3>" +
-        "JAudioTagger - <a href=\"http://www.jthink.net/jaudiotagger\">http://www.jthink.net/jaudiotagger</a><br>" +
-        "</html>"
-
     const val DIALOG_ABOUT                = "About AudioTagEditor"
     const val DIALOG_CLEAR                = "Clear Tags"
     const val DIALOG_CLEAR_FAILED         = "Clear Tags Failed"
@@ -191,4 +174,33 @@ object Constants {
     const val CANCEL                      = 2
     const val ICON_SIZE                   = 180
     const val THREADS                     = 4
+
+    //----------------------------------------------------------------------
+    fun aboutApp(): String {
+        var about = "<html>" +
+
+        "<h2>AudioTagEditor 1.11</h2>" +
+
+        "<h3>About</h3>" +
+        "Copyright © 2021 - 2023 gnuwimp@gmail.com.<br>" +
+        "Released under the GNU General Public License v3.0.<br>" +
+        "See: <a href=\"https://github.com/gnuwimp/AudioTagEditor\">https://github.com/gnuwimp/AudioTagEditor</a><br>" +
+        "<br>" +
+
+        "AudioTagEditor is an audio file tag editor written in Kotlin.<br>" +
+        "Use AudioTagEditor with caution and at your own risk.<br>" +
+        "<br>" +
+
+        "<h3>Following third party software library are used</h3>" +
+        "JAudioTagger - <a href=\"http://www.jthink.net/jaudiotagger\">http://www.jthink.net/jaudiotagger</a><br>" +
+        "<br>" +
+        "<h3>Versions</h3>"
+
+        about += "Java: " + System.getProperty("java.version") + "<br>"
+        about += "Kotlin: " + KotlinVersion.CURRENT + "<br>"
+        about += "JAudioTagger: 3.01"
+        about += "<html>"
+
+        return about
+    }
 }

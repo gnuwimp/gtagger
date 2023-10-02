@@ -21,7 +21,7 @@ object Main {
 
     init {
         try {
-            Swing.setup(theme = "nimbus", appName = Constants.APP_NAME, aboutText = Constants.APP_ABOUT, quitLambda = { quit() })
+            Swing.setup(theme = "nimbus", appName = Constants.APP_NAME, aboutText = Constants.aboutApp(), quitLambda = { quit() })
 
             noImage       = "gnuwimp/audiotageditor/cover.png".loadImageFromResource()
             icon          = "gnuwimp/audiotageditor/AudioTagEditor.png".loadImageFromResource()
