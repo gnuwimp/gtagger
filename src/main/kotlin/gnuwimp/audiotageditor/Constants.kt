@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 gnuwimp@gmail.com
+ * Copyright © 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -25,7 +25,6 @@ object Constants {
     const val LABEL_ALBUM                 = "Album"
     const val LABEL_ALBUM_ARTIST          = "Album artist"
     const val LABEL_APPEND_TEXT           = "Append text"
-    const val LABEL_APPLY_CHANGES         = "Apply changes"
     const val LABEL_ARTIST                = "Artist"
     const val LABEL_BITRATE               = "Bitrate"
     const val LABEL_COMMENT               = "Comment"
@@ -48,6 +47,7 @@ object Constants {
     const val LABEL_MOVE_DOWN             = "Move down"
     const val LABEL_MOVE_UP               = "Move up"
     const val LABEL_NUMBER_SEP            = "Number separator"
+    const val LABEL_PREVIEW_CHANGES       = "Preview changes"
     const val LABEL_QUIT                  = "Quit"
     const val LABEL_RELOAD_DIR            = "Reload directory"
     const val LABEL_REMOVE_COVER          = "Remove cover image"
@@ -179,10 +179,10 @@ object Constants {
     fun aboutApp(): String {
         var about = "<html>" +
 
-        "<h2>AudioTagEditor 1.11</h2>" +
+        "<h2>AudioTagEditor 1.12</h2>" +
 
         "<h3>About</h3>" +
-        "Copyright © 2021 - 2023 gnuwimp@gmail.com.<br>" +
+        "Copyright © 2021 - 2024 gnuwimp@gmail.com.<br>" +
         "Released under the GNU General Public License v3.0.<br>" +
         "See: <a href=\"https://github.com/gnuwimp/AudioTagEditor\">https://github.com/gnuwimp/AudioTagEditor</a><br>" +
         "<br>" +

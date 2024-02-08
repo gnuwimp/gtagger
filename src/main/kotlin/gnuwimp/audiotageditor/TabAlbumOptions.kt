@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 gnuwimp@gmail.com
+ * Copyright © 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -24,7 +24,7 @@ class TabAlbumOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
     private val albumArtistInput = JTextField()
     private val albumCheck       = JCheckBox(Constants.LABEL_ALBUM)
     private val albumInput       = JTextField()
-    private val applyButton      = JButton(Constants.LABEL_APPLY_CHANGES)
+    private val applyButton      = JButton(Constants.LABEL_PREVIEW_CHANGES)
     private val artistCheck      = JCheckBox(Constants.LABEL_ARTIST)
     private val artistInput      = JTextField()
     private val commentCheck     = JCheckBox(Constants.LABEL_COMMENT)
