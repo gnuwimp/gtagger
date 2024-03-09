@@ -25,7 +25,9 @@ Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.
 ## Changes
 <pre>
 1.12:   tags that are not used in AudioTagEditor are now removed when saving tags to audio file
+
 1.11:   updated Jaudiotagger library and added it to the source tree
+
 1.1:    renamed from gTagger to AudioTagEditor
         ui changes
         bug fixes
