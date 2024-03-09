@@ -1,20 +1,20 @@
 # AudioTagEditor
 
 ## About
-AudioTagEditor is a metatag editor for audio files written in Kotlin.
-It can edit common audio files and tags.
-And also do batch operations on selected tracks.
+AudioTagEditor is a metatag editor for audio files written in Kotlin.  
+It can edit common audio files and tags.  
+And also do batch operations on selected tracks.  
 
-AudioTagEditor is written in kotlin and released under the [GNU General Public License v3.0](LICENSE).
-You will need [Java](http://java.com) installed to run this program.
+AudioTagEditor is written in kotlin and released under the [GNU General Public License v3.0](LICENSE).  
+You will need [Java](http://java.com) installed to run this program.  
 
 ## Download
-Download AudioTagEditor from [here](https://github.com/gnuwimp/AudioTagEditor/releases).
-[Java](https://java.com) is needed.
+Download AudioTagEditor from [here](https://github.com/gnuwimp/AudioTagEditor/releases).  
+[Java](https://java.com) is needed (version 17+). 
 
 ## Usage
-Double-click on the jar file to start the program in windows.
-Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.
+Double-click on the jar file to start the program in windows.  
+Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.  
 
 ## Screenshots
 <img src="images/audiotageditor.png" width="70%" height="70%"/>

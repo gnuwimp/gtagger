@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 - 2024 gnuwimp@gmail.com
+ * Copyright 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -182,7 +182,7 @@ object Constants {
         "<h2>AudioTagEditor 1.12</h2>" +
 
         "<h3>About</h3>" +
-        "Copyright © 2021 - 2024 gnuwimp@gmail.com.<br>" +
+        "Copyright 2021 - 2024 gnuwimp@gmail.com.<br>" +
         "Released under the GNU General Public License v3.0.<br>" +
         "See: <a href=\"https://github.com/gnuwimp/AudioTagEditor\">https://github.com/gnuwimp/AudioTagEditor</a><br>" +
         "<br>" +
