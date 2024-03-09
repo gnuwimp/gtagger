@@ -7,14 +7,15 @@ JAudioTagger is released under the GNU Lesser General Public License.<br />
 
 You will need [Java](http://java.com) installed to run this program.<br />
 
-<hr>
+## License
+gTagger is released under the [GNU General Public License v3.0](LICENSE).<br />
 
 ## Download
-gTagger is released under the [GNU General Public License v3.0](LICENSE).<br />
-A compiled jar file with all dependecys included can be downloaded [here](bin/gtagger.jar)<br />
-Double click to start the program or run it from the command line with <code>"java -jar gtagger.jar"</code>.<br />
+Download from [here](https://github.com/gnuwimp/gtagger/releases).<br />
 
-<hr>
+## Run
+Double click on the jar file to start the program in windows.<br />
+Or run it from the command line with <code>"java -jar gtagger.jar"</code>.<br />
 
 ## Screenshots
 <img src="bin/gtagger.png" width="50%" height="50%"/><br />
