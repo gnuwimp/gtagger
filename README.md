@@ -18,4 +18,4 @@ Double click on the jar file to start the program in windows.<br />
 Or run it from the command line with <code>"java -jar gtagger.jar"</code>.<br />
 
 ## Screenshots
-<img src="bin/gtagger.png" width="50%" height="50%"/><br />
+<img src="images/gtagger.png" width="50%" height="50%"/><br />
