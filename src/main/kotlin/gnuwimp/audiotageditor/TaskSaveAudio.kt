@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.util.Task
 
@@ -18,10 +18,10 @@ class TaskSaveAudio(val track: Track, fileName: String) : Task(max = 1) {
     //--------------------------------------------------------------------------
     override fun run() {
         if (abort == true) {
-            throw Exception(Labels.ERROR_ABORTING_SAVING)
+            throw Exception(Constants.ERROR_ABORTING_SAVING)
         }
         else {
-            track.save()
+            track.save(false)
             progress = 1
         }
     }

@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 /**
  * Genre object for tags in MP3 files and perhaps other audio formats.

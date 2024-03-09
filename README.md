@@ -1,22 +1,30 @@
-# gTagger
-gTagger is an tag editor for audio files written in Kotlin. <br />
-It can edit common audio tags and file names and also do batch operations on selected tracks.<br />
+# AudioTagEditor
 
-gTagger uses [JAudioTagger](http://www.jthink.net/jaudiotagger) library for reading and writing of audio files.
-Source code from [bitbucket](https://bitbucket.org/ijabz/jaudiotagger/src/master).
-JAudioTagger is released under the GNU Lesser General Public License.<br />
+## About
+AudioTagEditor is a metatag editor for audio files written in Kotlin.  
+It can edit common audio files and tags.  
+And also do batch operations on selected tracks.
 
-You will need [Java](http://java.com) installed to run this program.<br />
-
-## License
-gTagger is released under the [GNU General Public License v3.0](LICENSE).<br />
+AudioTagEditor is written in kotlin and released under the [GNU General Public License v3.0](LICENSE).  
+You will need [Java](http://java.com) installed to run this program.
 
 ## Download
-Download from [here](https://github.com/gnuwimp/gtagger/releases).<br />
+Download AudioTagEditor from [here](https://github.com/gnuwimp/AudioTagEditor/releases).  
+[Java](https://java.com) is needed.  
 
-## Run
-Double click on the jar file to start the program in windows.<br />
-Or run it from the command line with <code>"java -jar gtagger.jar"</code>.<br />
+## Usage
+Double-click on the jar file to start the program in windows.  
+Or run it from the command line with <code>java -jar AudioTagEditor.jar</code>.
 
 ## Screenshots
-<img src="images/gtagger.png" width="80%" height="80%"/><br />
+<img src="images/audiotageditor.png" width="40%" height="40%"/>
+<img src="images/audiotageditor-2.png" width="40%" height="40%"/>
+<img src="images/audiotageditor-3.png" width="40%" height="40%"/>
+<img src="images/audiotageditor-4.png" width="40%" height="40%"/>
+
+## Changes
+<pre>
+1.1:    renamed from gTagger to AudioTagEditor
+        ui changes
+        bug fixes
+</pre>

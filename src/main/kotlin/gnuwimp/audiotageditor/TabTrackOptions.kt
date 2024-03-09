@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.ComboBox
 import gnuwimp.swing.LayoutPanel
@@ -13,40 +13,37 @@ import java.util.prefs.Preferences
 import javax.swing.JButton
 import javax.swing.JComponent
 import javax.swing.JLabel
-import javax.swing.JOptionPane
 
 /**
  * Create a panel with input widgets for all track properties.
  */
-class TabTrackOptions(private val pref: Preferences) : LayoutPanel(size = Swing.defFont.size / 2) {
-    private val albumLabel        = JLabel(Labels.LABEL_ALBUM)
-    private val albumArtistLabel  = JLabel(Labels.LABEL_ALBUM_ARTIST)
+class TabTrackOptions(private val pref: Preferences) : LayoutPanel(size = Swing.defFont.size / 2 + 1) {
+    private val albumLabel        = JLabel(Constants.LABEL_ALBUM)
+    private val albumArtistLabel  = JLabel(Constants.LABEL_ALBUM_ARTIST)
     private val albumArtistInput  = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.artist) { track.albumArtist = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
     private val albumInput        = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.album) { track.album = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val artistLabel       = JLabel(Labels.LABEL_ARTIST)
+    private val artistLabel       = JLabel(Constants.LABEL_ARTIST)
     private val artistInput       = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.artist) { track.artist = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val clearButton       = JButton(Labels.LABEL_DELETE_TAGS)
-    private val commentLabel      = JLabel(Labels.LABEL_COMMENT)
+    private val commentLabel      = JLabel(Constants.LABEL_COMMENT)
     private val commentInput      = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.comment) { track.comment = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val composerLabel     = JLabel(Labels.LABEL_COMPOSER)
+    private val composerLabel     = JLabel(Constants.LABEL_COMPOSER)
     private val composerInput     = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.composer) { track.composer = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val coverLabel        = JLabel(Labels.LABEL_COVER)
+    private val coverLabel        = JLabel(Constants.LABEL_COVER)
     private val coverIcon         = JLabel()
-    private val deleteFileButton  = JButton(Labels.LABEL_DELETE_TRACK)
-    private val encoderLabel      = JLabel(Labels.LABEL_ENCODER)
+    private val encoderLabel      = JLabel(Constants.LABEL_ENCODER)
     private val encoderInput      = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.encoder) { track.encoder = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val filenameLabel     = JLabel(Labels.LABEL_FILENAME)
+    private val filenameLabel     = JLabel(Constants.LABEL_FILENAME)
     private val filenameInput     = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.fileName) { track.fileName = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val genreLabel        = JLabel(Labels.LABEL_GENRE)
+    private val genreLabel        = JLabel(Constants.LABEL_GENRE)
     private val genreCombo        = ComboBox<String>(strings = ID3Genre.strings.sorted(), callback = { val track = Data.selectedTrack; if (track != null && it != track.genre) { track.genre = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val loadCoverButton   = JButton(Labels.LABEL_LOAD_IMAGE)
-    private val removeCoverButton = JButton(Labels.LABEL_REMOVE_COVER)
-    private val saveButton        = JButton(Labels.LABEL_SAVE)
-    private val titleLabel        = JLabel(Labels.LABEL_TITLE)
+    private val loadCoverButton   = JButton(Constants.LABEL_LOAD_IMAGE)
+    private val removeCoverButton = JButton(Constants.LABEL_REMOVE_COVER)
+    private val saveButton        = JButton(Constants.LABEL_SAVE)
+    private val titleLabel        = JLabel(Constants.LABEL_TITLE)
     private val titleInput        = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.title) { track.title = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val trackLabel        = JLabel(Labels.LABEL_TRACK)
+    private val trackLabel        = JLabel(Constants.LABEL_TRACK)
     private val trackInput        = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.track) { track.track = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
-    private val yearLabel         = JLabel(Labels.LABEL_YEAR)
+    private val yearLabel         = JLabel(Constants.LABEL_YEAR)
     private val yearInput         = TextField(callback = { val track = Data.selectedTrack; if (track != null && it != track.year) { track.year = it ; Data.sendUpdate(TrackEvent.ITEM_DIRTY) } })
     private val activateWidgets: List<JComponent> = listOf(artistInput, albumInput, albumArtistInput, titleInput, yearInput, genreCombo, trackInput, commentInput, composerInput, encoderInput, filenameInput, loadCoverButton)
 
@@ -99,45 +96,25 @@ class TabTrackOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
 
         yp += 5
         add(coverLabel, x = 1, y = yp, w = lw, h = 4)
-        add(coverIcon, x = lw + 2, y = yp, w = -1, h = (Labels.ICON_SIZE / (Swing.defFont.size / 2)) + 4)
+        add(coverIcon, x = lw + 2, y = yp, w = -1, h = (Constants.ICON_SIZE / (Swing.defFont.size / 2)) + 4)
 
-        yp = -25
+        yp = -15
         add(loadCoverButton, x = 1, y = yp, w = -1, h = 4)
 
         yp += 5
         add(removeCoverButton, x = 1, y = yp, w = -1, h = 4)
 
         yp += 5
-        add(clearButton, x = 1, y = yp, w = -1, h = 4)
-
-        yp += 5
-        add(deleteFileButton, x = 1, y = yp, w = -1, h = 4)
-
-        yp += 5
         add(saveButton, x = 1, y = yp, w = -1, h = 4)
 
-        clearButton.toolTipText       = Labels.TOOL_DELETE_TAGS1
         coverIcon.horizontalAlignment = JLabel.LEFT
-        deleteFileButton.toolTipText  = Labels.TOOL_DELETE_TRACK
         genreCombo.isEditable         = true
-        loadCoverButton.toolTipText   = Labels.TOOL_LOAD_IMAGE
-        removeCoverButton.toolTipText = Labels.TOOL_DELETE_COVER
-        saveButton.toolTipText        = Labels.TOOL_SAVE
+        loadCoverButton.toolTipText   = Constants.TOOL_LOAD_IMAGE
+        removeCoverButton.toolTipText = Constants.TOOL_DELETE_COVER
+        saveButton.toolTipText        = Constants.TOOL_SAVE
 
         setIcon(null)
         setButtons(false)
-
-        //----------------------------------------------------------------------
-        clearButton.addActionListener {
-            Data.removeTags()
-        }
-
-        //----------------------------------------------------------------------
-        deleteFileButton.addActionListener {
-            if (JOptionPane.showConfirmDialog(Main.window, Labels.MESSAGE_ASK_DELETE_HTML, Labels.DIALOG_DELETE, JOptionPane.YES_NO_OPTION) == 0) {
-                Data.deleteTrack()
-            }
-        }
 
         //----------------------------------------------------------------------
         loadCoverButton.addActionListener {
@@ -183,18 +160,8 @@ class TabTrackOptions(private val pref: Preferences) : LayoutPanel(size = Swing.
 
     //----------------------------------------------------------------------
     fun setButtons(track: Boolean) {
-        saveButton.isEnabled = Data.isAnyChangedAndSelected
-
-        if (track == true) {
-            clearButton.isEnabled      = true
-            deleteFileButton.isEnabled = true
-            loadCoverButton.isEnabled  = true
-        }
-        else {
-            clearButton.isEnabled      = false
-            deleteFileButton.isEnabled = false
-            loadCoverButton.isEnabled  = false
-        }
+        saveButton.isEnabled      = Data.isAnyChangedAndSelected
+        loadCoverButton.isEnabled = track == true
 
         activateWidgets.forEach { widget ->
             widget.isEnabled = track

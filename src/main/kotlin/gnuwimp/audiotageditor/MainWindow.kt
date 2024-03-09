@@ -1,9 +1,9 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.StatusBar
 import gnuwimp.swing.Swing
@@ -24,7 +24,7 @@ import kotlin.system.exitProcess
  * And four tab widgets to the right.
  * A splitter is between tree and tab container widget.
  */
-class MainWindow(title: String = Labels.APP_NAME) : JFrame(title) {
+class MainWindow(title: String = Constants.APP_NAME) : JFrame(title) {
     private val pref: Preferences = Preferences.userNodeForPackage(Main.javaClass)
     private val albumOptions      = TabAlbumOptions(pref)
     private val albumTab          = JSplitPane()
@@ -48,7 +48,7 @@ class MainWindow(title: String = Labels.APP_NAME) : JFrame(title) {
 
     /**
      * Get or set selected tab.
-     * Setting index forces a redraw.
+     * Setting index forces redraw.
      */
     private var selectedTab: Int
         get() = oldTabIndex
@@ -82,10 +82,10 @@ class MainWindow(title: String = Labels.APP_NAME) : JFrame(title) {
         titleTab.rightComponent  = titleTable
 
         tabs.border = BorderFactory.createEmptyBorder(5, 3, 5, 3)
-        tabs.addTab(Labels.LABEL_TAB_TRACK, null, trackTab, Labels.TOOL_TAB_TRACK)
-        tabs.addTab(Labels.LABEL_TAB_FILE, null, fileTab, Labels.TOOL_TAB_FILE)
-        tabs.addTab(Labels.LABEL_TAB_TITLE, null, titleTab, Labels.TOOL_TAB_TITLE)
-        tabs.addTab(Labels.LABEL_TAB_ALBUM, null, albumTab, Labels.TOOL_TAB_ALBUM)
+        tabs.addTab(Constants.LABEL_TAB_TRACK, null, trackTab, Constants.TOOL_TAB_TRACK)
+        tabs.addTab(Constants.LABEL_TAB_FILE, null, fileTab, Constants.TOOL_TAB_FILE)
+        tabs.addTab(Constants.LABEL_TAB_TITLE, null, titleTab, Constants.TOOL_TAB_TITLE)
+        tabs.addTab(Constants.LABEL_TAB_ALBUM, null, albumTab, Constants.TOOL_TAB_ALBUM)
 
         main.add(splitPane, BorderLayout.CENTER)
         main.add(statusBar, BorderLayout.SOUTH)
@@ -101,16 +101,16 @@ class MainWindow(title: String = Labels.APP_NAME) : JFrame(title) {
                 val currentRow = Data.selectedRow
 
                 when {
-                    Data.isAnyChangedAndSelected -> when (JOptionPane.showConfirmDialog(Main.window, Labels.MESSAGE_ASK_SAVE_HTML, Labels.DIALOG_SAVE, JOptionPane.YES_NO_CANCEL_OPTION)) {
-                        Labels.YES -> {
+                    Data.isAnyChangedAndSelected -> when (JOptionPane.showConfirmDialog(Main.window, Constants.MESSAGE_ASK_SAVE_HTML, Constants.DIALOG_SAVE, JOptionPane.YES_NO_CANCEL_OPTION)) {
+                        Constants.YES -> {
                             selectedTab = if (Data.saveTracks()) tab.selectedIndex else selectedTab
                         }
-                        Labels.NO -> {
+                        Constants.NO -> {
                             Data.copyTagsFromAudio()
                             Data.sendUpdate(TrackEvent.LIST_UPDATED)
                             selectedTab = tab.selectedIndex
                         }
-                        Labels.CANCEL -> selectedTab = selectedTab
+                        Constants.CANCEL -> selectedTab = selectedTab
                     }
                     Data.isAnyChanged -> {
                         Data.copyTagsFromAudio()
@@ -203,8 +203,8 @@ class MainWindow(title: String = Labels.APP_NAME) : JFrame(title) {
      * Quit but ask to save if data has been changed.
      */
     fun quit() {
-        if (Data.isAnyChangedAndSelected == true && JOptionPane.showConfirmDialog(Main.window, Labels.MESSAGE_ASK_SAVE_HTML, Labels.DIALOG_SAVE, JOptionPane.YES_NO_OPTION) == Labels.YES && Data.saveTracks() == false) {
-            JOptionPane.showMessageDialog(Main.window, Labels.ERROR_SAVE_HTML, Labels.DIALOG_SAVE_FAILED, JOptionPane.ERROR_MESSAGE)
+        if (Data.isAnyChangedAndSelected == true && JOptionPane.showConfirmDialog(Main.window, Constants.MESSAGE_ASK_SAVE_HTML, Constants.DIALOG_SAVE, JOptionPane.YES_NO_OPTION) == Constants.YES && Data.saveTracks() == false) {
+            JOptionPane.showMessageDialog(Main.window, Constants.ERROR_SAVE_HTML, Constants.DIALOG_SAVE_FAILED, JOptionPane.ERROR_MESSAGE)
         }
         else {
             prefSave()

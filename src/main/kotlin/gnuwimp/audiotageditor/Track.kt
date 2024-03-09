@@ -1,19 +1,19 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.Swing
 import gnuwimp.swing.scale
 import gnuwimp.util.TimeFormat
 import gnuwimp.util.format
-import gnuwimp.util.numOrMinus
 import gnuwimp.util.numOrZero
 import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 import org.jaudiotagger.tag.images.StandardArtwork
 import java.io.File
 import javax.swing.ImageIcon
@@ -36,13 +36,74 @@ val List<TaskReadAudio>.tracks: List<Track>
         return list
     }
 
+/**
+ * Get cover image with no exception.
+ */
+fun Tag.getCover(): String {
+    return try {
+        if (firstArtwork != null) "cover" else ""
+    }
+    catch (e: Exception) {
+        Swing.logMessage = e.message.toString()
+        ""
+    }
+}
+
+/**
+ * Get tag value with no exception.
+ */
+fun Tag.getValue(field: FieldKey): String {
+    return try {
+        getFirst(field)
+    }
+    catch (e: Exception) {
+        Swing.logMessage = e.message.toString()
+        ""
+    }
+}
+
+/**
+ * Set cover image with no exception.
+ */
+fun Tag.setCover(cover: String): Int {
+    return try {
+        if (cover == "") {
+            deleteArtworkField()
+        }
+        else if (cover != "cover") {
+            deleteArtworkField()
+            addField(StandardArtwork.createArtworkFromFile(File(cover)))
+        }
+
+        0
+    }
+    catch (e: Exception) {
+        Swing.logMessage = e.message.toString()
+        1
+    }
+}
+
+/**
+ * Set tag value with no exception.
+ */
+fun Tag.setValue(field: FieldKey, value: String): Int {
+    return try {
+        setField(field, value)
+        0
+    }
+    catch (e: Exception) {
+        Swing.logMessage = e.message.toString()
+        1
+    }
+}
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
 /**
  * Data events for all classes that are interested to receive data changes.
- * All events are sent to classes using TrackListener interface.
+ * All events that are sent to all classes using TrackListener interface.
  */
 enum class TrackEvent {
     ITEM_DIRTY,
@@ -69,17 +130,22 @@ interface TrackListener {
 
 /**
  * Track object contains medata data about audio tracks.
- * It can load and save meta data to the audio file.
+ * It can load and save metadata to the audio file.
  * It will use JAudioTagger library for loading and saving.
  * JAudioTagger library is only used in this file.
  */
 class Track(file: File) {
+    companion object {
+        var ERRORS = 0
+    }
+
     private var audio: AudioFile? = null
     private var selected          = true
     private var error             = false
     private var changed           = false
     private var cleared           = false
     private val test              = mutableMapOf<String, String>()
+    private val prop              = mutableMapOf<String, String>()
 
     /**
      * Album string.
@@ -124,13 +190,13 @@ class Track(file: File) {
      * Bitrate in raw number.
      */
     val bitrate: String
-        get() = test["bitrate"] ?: ""
+        get() = prop["bitrate"] ?: ""
 
     /**
      * Bitrate info string
      */
     val bitrateInfo: String
-        get() = test["bitrate_info"] ?: ""
+        get() = prop["bitrate_info"] ?: ""
 
     /**
      * Comment string.
@@ -162,7 +228,7 @@ class Track(file: File) {
      * Cover string.
      * If string is "cover" then it means that the cover is the embedded image in audio track.
      * If string is empty then it does not have any image.
-     * Otherwise is should be pointing to an image file.
+     * Otherwise, it should be pointing to an image file.
      */
     var cover: String
         get() = test["cover"] ?: ""
@@ -181,7 +247,7 @@ class Track(file: File) {
         get() {
             return if (cover == "cover") {
                 try {
-                    ImageIcon(audio?.tag?.firstArtwork?.binaryData).scale(Labels.ICON_SIZE.toDouble())
+                    ImageIcon(audio?.tag?.firstArtwork?.binaryData).scale(Constants.ICON_SIZE.toDouble())
                 }
                 catch (e: Exception) {
                     Data.message = e.message ?: ""
@@ -243,19 +309,19 @@ class Track(file: File) {
      * Filesize in bytes.
      */
     val fileSize: String
-        get() = test["file_size"] ?: ""
+        get() = prop["file_size"] ?: ""
 
     /**
      * Filesize info string with and as KB.
      */
     val fileSizeInfo: String
-        get() = test["file_size_info"] ?: ""
+        get() = prop["file_size_info"] ?: ""
 
     /**
      * Audio format info.
      */
     val formatInfo: String
-        get() = test["format"] ?: ""
+        get() = prop["format"] ?: ""
 
     /**
      * Audio genre string.
@@ -271,67 +337,50 @@ class Track(file: File) {
         }
 
     /**
-     * Compare meta data from file with track string hash data.
+     * Compare metadata from file with track string hash data.
      * Return true if any data has been changed.
      */
     private val hasChangedCompareWithTags: Boolean
         get() {
-            var res = false
+            val tag = audio?.tag
 
-            try {
-                val tag = audio?.tag
-
-                if (tag != null) {
-                    if (album != tag.getFirst(FieldKey.ALBUM)) {
-                        res = true
-                    }
-
-                    if (albumArtist != tag.getFirst(FieldKey.ALBUM_ARTIST)) {
-                        res = true
-                    }
-
-                    if (artist != tag.getFirst(FieldKey.ARTIST)) {
-                        res = true
-                    }
-
-                    if (comment != tag.getFirst(FieldKey.COMMENT)) {
-                        res = true
-                    }
-
-                    if (composer != tag.getFirst(FieldKey.COMPOSER)) {
-                        res = true
-                    }
-
-                    if (cover != "cover") {
-                        res = true
-                    }
-
-                    if (encoder != tag.getFirst(FieldKey.ENCODER)) {
-                        res = true
-                    }
-
-                    if (genre != tag.getFirst(FieldKey.GENRE)) {
-                        res = true
-                    }
-
-                    if (title != tag.getFirst(FieldKey.TITLE)) {
-                        res = true
-                    }
-
-                    if (track != tag.getFirst(FieldKey.TRACK)) {
-                        res = true
-                    }
-
-                    if (year != tag.getFirst(FieldKey.YEAR)) {
-                        res = true
-                    }
-
+            if (tag != null) {
+                if (album != tag.getValue(FieldKey.ALBUM)) {
+                    return true
+                }
+                else if (albumArtist != tag.getValue(FieldKey.ALBUM_ARTIST)) {
+                    return true
+                }
+                else if (artist != tag.getValue(FieldKey.ARTIST)) {
+                    return true
+                }
+                else if (comment != tag.getValue(FieldKey.COMMENT)) {
+                    return true
+                }
+                else if (composer != tag.getValue(FieldKey.COMPOSER)) {
+                    return true
+                }
+                else if (cover != "cover") {
+                    return true
+                }
+                else if (encoder != tag.getValue(FieldKey.ENCODER)) {
+                    return true
+                }
+                else if (genre != tag.getValue(FieldKey.GENRE)) {
+                    return true
+                }
+                else if (title != tag.getValue(FieldKey.TITLE)) {
+                    return true
+                }
+                else if (track != tag.getValue(FieldKey.TRACK)) {
+                    return true
+                }
+                else if (year != tag.getValue(FieldKey.YEAR)) {
+                    return true
                 }
             }
-            catch (e: Exception) {
-            }
 
-            return res
+            return false
         }
 
     /**
@@ -361,13 +410,13 @@ class Track(file: File) {
      * Time in milliseconds.
      */
     val time: String
-        get() = test["time"] ?: ""
+        get() = prop["time"] ?: ""
 
     /**
      * Time as formatted string "MM:SS".
      */
     val timeInfo: String
-        get() = test["time_info"] ?: ""
+        get() = prop["time_info"] ?: ""
 
     /**
      * Title string.
@@ -385,14 +434,14 @@ class Track(file: File) {
     /**
      *
      * Track number.
-     * Only track values from 1 - 99999 can be set.
+     * Only track values from 1 to 99999 can be set.
      */
     var track: String
         get() = test["track"] ?: ""
 
         set(value) {
-            if (test["track"] != value && value.numOrZero > 0 && value.numOrZero <= 99999) {
-                test["track"] = "${value.numOrMinus}"
+            if (test["track"] != value && value.numOrZero in 1..99999) {
+                test["track"] = "${value.numOrZero}"
                 changed = true
             }
         }
@@ -405,14 +454,14 @@ class Track(file: File) {
 
     /**
      * Year string.
-     * Only year values from 1900 - 9999 can be set.
+     * Only year values from 1 to 9999 can be set.
      */
     var year: String
         get() = test["year"] ?: ""
 
         set(value) {
-            if (test["year"] != value && value.numOrMinus >= 1900 && value.numOrZero <= 9999) {
-                test["year"] = "${value.numOrMinus}"
+            if (test["year"] != value && value.numOrZero in 1..9999) {
+                test["year"] = "${value.numOrZero}"
                 changed = true
             }
         }
@@ -428,24 +477,22 @@ class Track(file: File) {
     fun clear() {
         try {
             audio?.tag = audio?.createDefaultTag()
-            copyTagsFromAudio()
+            changed = true
+            save(true)
         }
         catch (e: Exception) {
             throw e
         }
-        finally {
-            changed = true
-            cleared = true
-        }
     }
 
     /**
-     * Copy meta data from audio track into internal hash.
-     * Changed and error flag is cleared even if it failes to read meta data.
+     * Copy metadata from audio track into internal hash.
+     * Changed and error flag is cleared even if it failes to read metadata.
      * And if it failes the hash data might be empty.
      */
     fun copyTagsFromAudio() {
         test.clear()
+        prop.clear()
 
         if (cleared == true || error == true) {
             load(audio?.file)
@@ -459,76 +506,55 @@ class Track(file: File) {
         error   = false
 
         if (tag != null && file != null && header != null) {
-            test["samplerate"]      = header.sampleRate
-            test["samplerate_info"] = "${header.sampleRate} Hz"
-            test["bitrate"]         = String.format("%04d", header.bitRateAsNumber)
-            test["bitrate_info"]    = "${header.bitRate} Kb/s"
-            test["file_size"]       = String.format("%08d", file.length())
-            test["file_size_info"]  = "${file.length() / 1000} kB"
-            test["format"]          = header.format
-            test["time"]            = String.format("%08d", header.trackLength)
-            test["time_info"]       = if (header.trackLength * 1000L >= 3600000) TimeFormat.LONG_TIME.format(header.trackLength * 1000L, "UTC") else TimeFormat.LONG_MINSEC.format(header.trackLength * 1000L, "UTC")
+            prop["samplerate"]      = header.sampleRate
+            prop["samplerate_info"] = "${header.sampleRate} Hz"
+            prop["bitrate"]         = String.format("%04d", header.bitRateAsNumber)
+            prop["bitrate_info"]    = "${header.bitRate} Kb/s"
+            prop["file_size"]       = String.format("%08d", file.length())
+            prop["file_size_info"]  = "%.2f MB".format(file.length().toDouble() / 1_000_000.0)
+            prop["format"]          = header.format.lowercase()
+            prop["time"]            = String.format("%08d", header.trackLength)
+            prop["time_info"]       = if (header.trackLength * 1000L >= 3600000) TimeFormat.LONG_TIME.format(header.trackLength * 1000L, "UTC") else TimeFormat.LONG_MINSEC.format(header.trackLength * 1000L, "UTC")
 
             fileExt     = file.extension
             fileName    = file.nameWithoutExtension
-            album       = tag.getFirst(FieldKey.ALBUM)
-            albumArtist = tag.getFirst(FieldKey.ALBUM_ARTIST)
-            artist      = tag.getFirst(FieldKey.ARTIST)
-            comment     = tag.getFirst(FieldKey.COMMENT)
-            composer    = tag.getFirst(FieldKey.COMPOSER)
-            cover       = if (tag.firstArtwork != null) "cover" else ""
-            encoder     = tag.getFirst(FieldKey.ENCODER)
-            genre       = tag.getFirst(FieldKey.GENRE)
-            title       = tag.getFirst(FieldKey.TITLE)
-            track       = tag.getFirst(FieldKey.TRACK)
-            year        = tag.getFirst(FieldKey.YEAR)
+            album       = tag.getValue(FieldKey.ALBUM)
+            albumArtist = tag.getValue(FieldKey.ALBUM_ARTIST)
+            artist      = tag.getValue(FieldKey.ARTIST)
+            comment     = tag.getValue(FieldKey.COMMENT)
+            composer    = tag.getValue(FieldKey.COMPOSER)
+            cover       = tag.getCover()
+            encoder     = tag.getValue(FieldKey.ENCODER)
+            genre       = tag.getValue(FieldKey.GENRE)
+            title       = tag.getValue(FieldKey.TITLE)
+            track       = tag.getValue(FieldKey.TRACK)
+            year        = tag.getValue(FieldKey.YEAR)
             changed     = false
 
         }
         else {
-            throw Exception(Labels.ERROR_LOADING_TRACK.format(audio?.file?.name ?: "?"))
+            throw Exception(Constants.ERROR_LOADING_TRACK.format(audio?.file?.name ?: "?"))
         }
     }
 
     /**
      * Copy tags from string hash to audio tag object.
      */
-    private fun copyTagsToAudio(): String {
-        try {
-            val tag = audio?.tag
+    private fun copyTagsToAudio() {
+        val tag = audio?.tag
 
-            if (tag != null) {
-                tag.setField(FieldKey.ALBUM, album)
-                tag.setField(FieldKey.ALBUM_ARTIST, albumArtist)
-                tag.setField(FieldKey.ARTIST, artist)
-                tag.setField(FieldKey.COMMENT, comment)
-                tag.setField(FieldKey.COMPOSER, composer)
-                tag.setField(FieldKey.ENCODER, encoder)
-                tag.setField(FieldKey.GENRE, genre)
-                tag.setField(FieldKey.TITLE, title)
-                tag.setField(FieldKey.TRACK, track)
-
-                if (year.numOrMinus >= 0) {
-                    tag.setField(FieldKey.YEAR, year)
-                }
-
-                if (cover.isBlank() == true) {
-                    tag.deleteArtworkField()
-                }
-                else if (cover != "cover") {
-                    tag.deleteArtworkField()
-                    tag.addField(StandardArtwork.createArtworkFromFile(File(cover)))
-                }
-
-                return ""
-            }
-            else {
-                throw Exception(Labels.ERROR_TAG_OBJECT)
-            }
-        }
-        catch (e: Exception) {
-            Swing.logMessage = e.message ?: "Unknown exception"
-            return e.message ?: "Unknown exception"
+        if (tag != null) {
+            ERRORS += tag.setValue(FieldKey.ALBUM, album)
+            ERRORS += tag.setValue(FieldKey.ALBUM_ARTIST, albumArtist)
+            ERRORS += tag.setValue(FieldKey.ARTIST, artist)
+            ERRORS += tag.setValue(FieldKey.COMMENT, comment)
+            ERRORS += tag.setValue(FieldKey.COMPOSER, composer)
+            ERRORS += tag.setValue(FieldKey.ENCODER, encoder)
+            ERRORS += tag.setValue(FieldKey.GENRE, genre)
+            ERRORS += tag.setValue(FieldKey.TITLE, title)
+            if (track.numOrZero in 1..9999) ERRORS += tag.setValue(FieldKey.TRACK, track)
+            if (year.numOrZero in 1..9999) ERRORS += tag.setValue(FieldKey.YEAR, year)
+            ERRORS += tag.setCover(cover)
         }
     }
 
@@ -550,7 +576,7 @@ class Track(file: File) {
      */
     private fun load(file: File?) {
         if (file != null) {
-            Swing.logMessage = Labels.MESSAGE_LOADING_TRACK.format(file.name)
+            Swing.logMessage = Constants.MESSAGE_LOADING_TRACK.format(file.name)
 
             audio = AudioFileIO.read(file)
 
@@ -564,47 +590,45 @@ class Track(file: File) {
     }
 
     /**
-     * Save meta data or change filename or both.
+     * Save metadata or change filename or both.
      */
-    fun save() {
+    fun save(force: Boolean) {
         error = true
 
-        val dirty = hasChangedCompareWithTags
-        val message = copyTagsToAudio()
+        val dirty = if (force == false) hasChangedCompareWithTags else true
 
-        if (message == "") {
-            val audio = audio
-            val file  = this.audio?.file
-
-            if (audio != null && file != null) {
-                if (dirty == true) {
-                    Swing.logMessage = Labels.MESSAGE_SAVING_TRACK.format(file.name)
-                    audio.commit()
-                }
-
-                if (test["file_name"] != this.audio?.file?.nameWithoutExtension) {
-                    val dest = File(file.parent + File.separator + test["file_name"] + "." + file.extension)
-
-                    Swing.logMessage = Labels.MESSAGE_RENAMING_TRACK.format(file.name, dest.name)
-
-                    if (file.renameTo(dest) == false) {
-                        throw Exception(Labels.ERROR_RENAME)
-                    }
-
-                    audio.file = dest
-                }
-
-                error   = false
-                cleared = false
-
-                copyTagsFromAudio()
-            }
-            else {
-                throw Exception("Track.save: internal problem")
-            }
+        if (force == false) {
+            copyTagsToAudio()
         }
-        else  {
-            throw Exception(message)
+
+        val audio = audio
+        val file  = this.audio?.file
+
+        if (audio != null && file != null) {
+            if (dirty == true) {
+                Swing.logMessage = Constants.MESSAGE_SAVING_TRACK.format(file.name)
+                audio.commit()
+            }
+
+            if (test["file_name"] != this.audio?.file?.nameWithoutExtension) {
+                val dest = File(file.parent + File.separator + test["file_name"] + "." + file.extension)
+
+                Swing.logMessage = Constants.MESSAGE_RENAMING_TRACK.format(file.name, dest.name)
+
+                if (file.renameTo(dest) == false) {
+                    throw Exception(Constants.ERROR_RENAME)
+                }
+
+                audio.file = dest
+            }
+
+            error   = false
+            cleared = false
+
+            copyTagsFromAudio()
+        }
+        else {
+            throw Exception("Track.save: internal problem")
         }
     }
 

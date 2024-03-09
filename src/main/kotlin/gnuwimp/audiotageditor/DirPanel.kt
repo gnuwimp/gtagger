@@ -1,12 +1,11 @@
 /*
- * Copyright 2016 - 2021 gnuwimp@gmail.com
+ * Copyright © 2021 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
-package gnuwimp.gtagger
+package gnuwimp.audiotageditor
 
 import gnuwimp.swing.*
-import java.io.File
 import javax.swing.JButton
 
 /**
@@ -16,10 +15,10 @@ import javax.swing.JButton
 class DirPanel : LayoutPanel(size = Swing.defFont.size / 2), DirListener {
     private var path         = ""
     private val dirTree      = DirTree(dirListener = this)
-    private val logButton    = JButton(Labels.LABEL_SHOW_LOG)
-    private val reloadButton = JButton(Labels.LABEL_RELOAD_DIR)
-    private val aboutButton  = JButton(Labels.LABEL_ABOUT)
-    private val quitButton   = JButton(Labels.LABEL_QUIT)
+    private val logButton    = JButton(Constants.LABEL_SHOW_LOG)
+    private val reloadButton = JButton(Constants.LABEL_RELOAD_DIR)
+    private val aboutButton  = JButton(Constants.LABEL_ABOUT)
+    private val quitButton   = JButton(Constants.LABEL_QUIT)
 
     /**
      * Get current directory
@@ -33,21 +32,21 @@ class DirPanel : LayoutPanel(size = Swing.defFont.size / 2), DirListener {
         add(aboutButton, x = 1, y = -10, w = -1, h = 4)
         add(quitButton, x = 1, y = -5, w = -1, h = 4)
 
-        logButton.toolTipText    = Labels.TOOL_SHOW_LOG
-        reloadButton.toolTipText = Labels.TOOL_RELOAD
-        aboutButton.toolTipText  = Labels.TOOL_ABOUT
-        quitButton.toolTipText   = Labels.TOOL_QUIT
+        logButton.toolTipText    = Constants.TOOL_SHOW_LOG
+        reloadButton.toolTipText = Constants.TOOL_RELOAD
+        aboutButton.toolTipText  = Constants.TOOL_ABOUT
+        quitButton.toolTipText   = Constants.TOOL_QUIT
 
         //----------------------------------------------------------------------
         // Show about dialog box
         aboutButton.addActionListener {
-            AboutHandler(Labels.DIALOG_ABOUT, Labels.APP_ABOUT).show(parent = Main.window, width = Swing.defFont.size * 50, height = Swing.defFont.size * 30)
+            AboutHandler(Constants.DIALOG_ABOUT, Constants.APP_ABOUT).show(parent = Main.window, width = Swing.defFont.size * 50, height = Swing.defFont.size * 30)
         }
 
         //----------------------------------------------------------------------
         // Show log dialog
         logButton.addActionListener {
-            val dialog = TextDialog(text = Swing.logMessage, showLastLine = true, title = Labels.DIALOG_LOG, parent = Main.window)
+            val dialog = TextDialog(text = Swing.logMessage, showLastLine = true, title = Constants.DIALOG_LOG, parent = Main.window)
             dialog.isVisible = true
         }
 
@@ -60,8 +59,9 @@ class DirPanel : LayoutPanel(size = Swing.defFont.size / 2), DirListener {
         //----------------------------------------------------------------------
         // Reload current directory
         reloadButton.addActionListener {
-            if (Data.saveChangedAskFirst(displayErrorDialogOnSave = false, abortOnFailedSave = true))
+            if (Data.saveChangedAskFirst(displayErrorDialogOnSave = false, abortOnFailedSave = true)) {
                 Data.loadTracks(newPath = Data.path)
+            }
         }
     }
 
@@ -69,8 +69,7 @@ class DirPanel : LayoutPanel(size = Swing.defFont.size / 2), DirListener {
      * Restore path in tree so it is selected.
      */
     fun restore(path: String) {
-        if (File(path).isDirectory)
-            dirTree.restore(path)
+        dirTree.restore(path)
     }
 
     /**
