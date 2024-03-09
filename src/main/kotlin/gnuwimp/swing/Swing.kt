@@ -46,7 +46,7 @@ class AboutHandler(val appName: String, val aboutText: String) : InvocationHandl
     /**
      * Show about dialog.
      */
-    fun show(width: Int = Swing.defFont.size * 60, height: Int = Swing.defFont.size * 50) {
+    fun show(width: Int = Swing.defFont.size * 60, height: Int = Swing.defFont.size * 40) {
         val dialog = HTMLDialog(html = aboutText, title = appName, width = width, height = height)
         dialog.isVisible = true
     }
@@ -54,7 +54,7 @@ class AboutHandler(val appName: String, val aboutText: String) : InvocationHandl
     /**
      * Show about dialog.
      */
-    fun show(parent: JFrame, width: Int = Swing.defFont.size * 60, height: Int = Swing.defFont.size * 50) {
+    fun show(parent: JFrame, width: Int = Swing.defFont.size * 60, height: Int = Swing.defFont.size * 40) {
         val dialog = HTMLDialog(html = aboutText, title = appName, parent = parent, width = width, height = height)
         dialog.isVisible = true
     }

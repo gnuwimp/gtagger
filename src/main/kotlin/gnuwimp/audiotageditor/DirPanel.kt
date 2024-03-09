@@ -40,7 +40,7 @@ class DirPanel : LayoutPanel(size = Swing.defFont.size / 2), DirListener {
         //----------------------------------------------------------------------
         // Show about dialog box
         aboutButton.addActionListener {
-            AboutHandler(Constants.DIALOG_ABOUT, Constants.APP_ABOUT).show(parent = Main.window, width = Swing.defFont.size * 50, height = Swing.defFont.size * 30)
+            AboutHandler(Constants.DIALOG_ABOUT, Constants.aboutApp()).show(parent = Main.window, width = Swing.defFont.size * 60, height = Swing.defFont.size * 50)
         }
 
         //----------------------------------------------------------------------
