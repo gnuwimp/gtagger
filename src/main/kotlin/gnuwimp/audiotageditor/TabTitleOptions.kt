@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 gnuwimp@gmail.com
+ * Copyright © 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -19,7 +19,7 @@ import javax.swing.JTextField
 class TabTitleOptions : LayoutPanel(size = Swing.defFont.size / 2 + 1) {
     private val appendTextCheck     = JCheckBox(Constants.LABEL_APPEND_TEXT)
     private val appendTextInput     = JTextField()
-    private val applyButton         = JButton(Constants.LABEL_APPLY_CHANGES)
+    private val applyButton         = JButton(Constants.LABEL_PREVIEW_CHANGES)
     private val insertAlbumCheck    = JCheckBox(Constants.LABEL_INSERT_ALBUM)
     private val insertAlbumInput    = JTextField()
     private val insertArtistCheck   = JCheckBox(Constants.LABEL_INSERT_ARTIST)

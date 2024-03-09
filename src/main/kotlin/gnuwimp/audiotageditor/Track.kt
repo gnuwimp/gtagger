@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 gnuwimp@gmail.com
+ * Copyright © 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -14,6 +14,7 @@ import org.jaudiotagger.audio.AudioFile
 import org.jaudiotagger.audio.AudioFileIO
 import org.jaudiotagger.tag.FieldKey
 import org.jaudiotagger.tag.Tag
+import org.jaudiotagger.tag.images.Artwork
 import org.jaudiotagger.tag.images.StandardArtwork
 import java.io.File
 import javax.swing.ImageIcon
@@ -75,6 +76,21 @@ fun Tag.setCover(cover: String): Int {
             addField(StandardArtwork.createArtworkFromFile(File(cover)))
         }
 
+        0
+    }
+    catch (e: Exception) {
+        Swing.logMessage = e.message.toString()
+        1
+    }
+}
+
+/**
+ * Set cover image with no exception.
+ */
+fun Tag.setCover(art: Artwork): Int {
+    return try {
+        deleteArtworkField()
+        addField(art)
         0
     }
     catch (e: Exception) {
@@ -478,7 +494,7 @@ class Track(file: File) {
         try {
             audio?.tag = audio?.createDefaultTag()
             changed = true
-            save(true)
+            save(updateTagsWithUserData = false)
         }
         catch (e: Exception) {
             throw e
@@ -539,8 +555,12 @@ class Track(file: File) {
 
     /**
      * Copy tags from string hash to audio tag object.
+     * Create new tag to delete all unused tags (for AudiTagEditor) then copy from widgets.
+     * Image has to been extracted first, so it can be reattached.
      */
-    private fun copyTagsToAudio() {
+    private fun copyUserDataToTag() {
+        val art = audio?.tag?.firstArtwork
+        audio?.tag = audio?.createDefaultTag()
         val tag = audio?.tag
 
         if (tag != null) {
@@ -552,9 +572,21 @@ class Track(file: File) {
             ERRORS += tag.setValue(FieldKey.ENCODER, encoder)
             ERRORS += tag.setValue(FieldKey.GENRE, genre)
             ERRORS += tag.setValue(FieldKey.TITLE, title)
-            if (track.numOrZero in 1..9999) ERRORS += tag.setValue(FieldKey.TRACK, track)
-            if (year.numOrZero in 1..9999) ERRORS += tag.setValue(FieldKey.YEAR, year)
-            ERRORS += tag.setCover(cover)
+
+            if (track.numOrZero in 1..9999) {
+                ERRORS += tag.setValue(FieldKey.TRACK, track)
+            }
+
+            if (year.numOrZero in 1..9999) {
+                ERRORS += tag.setValue(FieldKey.YEAR, year)
+            }
+
+            ERRORS += if (cover == "cover" && art != null) {
+                tag.setCover(art)
+            }
+            else {
+                tag.setCover(cover)
+            }
         }
     }
 
@@ -592,13 +624,13 @@ class Track(file: File) {
     /**
      * Save metadata or change filename or both.
      */
-    fun save(force: Boolean) {
+    fun save(updateTagsWithUserData: Boolean) {
         error = true
 
-        val dirty = if (force == false) hasChangedCompareWithTags else true
+        val dirty = if (updateTagsWithUserData == false) hasChangedCompareWithTags else true
 
-        if (force == false) {
-            copyTagsToAudio()
+        if (updateTagsWithUserData == true) {
+            copyUserDataToTag()
         }
 
         val audio = audio

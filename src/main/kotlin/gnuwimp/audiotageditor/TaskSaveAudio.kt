@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 gnuwimp@gmail.com
+ * Copyright © 2021 - 2024 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -21,7 +21,7 @@ class TaskSaveAudio(val track: Track, fileName: String) : Task(max = 1) {
             throw Exception(Constants.ERROR_ABORTING_SAVING)
         }
         else {
-            track.save(false)
+            track.save(updateTagsWithUserData = true)
             progress = 1
         }
     }
