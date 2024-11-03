@@ -297,8 +297,14 @@ object Data {
         val list = File(path).listFiles()
 
         if (list != null) {
-            list.sortBy {
-                it.canonicalFile
+            try { // Catch very illegal filenames in windows.
+                list.sortBy {
+                    it.absoluteFile
+                }
+            }
+            catch (e: Exception) {
+                JOptionPane.showMessageDialog(null, e, Constants.APP_NAME, JOptionPane.ERROR_MESSAGE)
+                return
             }
 
             list.filter(File::isAudio).forEach {
@@ -308,7 +314,7 @@ object Data {
 
         LogManager.getLogManager().reset()
 
-        if (tasks.size > 0) {
+        if (tasks.isNotEmpty()) {
             val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
             val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_LOAD, parent = Main.window)
 
@@ -508,7 +514,7 @@ object Data {
             tasks.add(TaskSaveAudio(track = track, fileName = track.fileName))
         }
 
-        if (tasks.size > 0) {
+        if (tasks.isNotEmpty() == true) {
             val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
             val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_SAVE, parent = Main.window)
 
@@ -518,8 +524,11 @@ object Data {
             val stat = Constants.MESSAGE_TIME.format("${System.currentTimeMillis() - start}")
             val row  = selectedRow
 
-            message = if (Track.ERRORS > 0) {
-                Constants.ERROR_SAVING2.format(Track.ERRORS)
+            message = if (tasks.countOk == 0) {
+                Constants.ERROR_SAVING3.format(tasks.size)
+            }
+            else if (Track.ERRORS > 0) {
+                Constants.ERROR_SAVING2.format(tasks.countOk)
             }
             else if (tasks.countError > 0) {
                 Constants.ERROR_SAVING1.format(tasks.countOk, tasks.countError, stat)

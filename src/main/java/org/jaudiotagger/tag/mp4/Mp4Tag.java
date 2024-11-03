@@ -81,6 +81,7 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.CONDUCTOR_SORT, Mp4FieldKey.CONDUCTOR_SORT);
         tagFieldToMp4Field.put(FieldKey.COPYRIGHT, Mp4FieldKey.COPYRIGHT);
         tagFieldToMp4Field.put(FieldKey.COVER_ART, Mp4FieldKey.ARTWORK);
+        tagFieldToMp4Field.put(FieldKey.CREDITS, Mp4FieldKey.CREDITS);
         tagFieldToMp4Field.put(FieldKey.CUSTOM1, Mp4FieldKey.MM_CUSTOM_1);
         tagFieldToMp4Field.put(FieldKey.CUSTOM2, Mp4FieldKey.MM_CUSTOM_2);
         tagFieldToMp4Field.put(FieldKey.CUSTOM3, Mp4FieldKey.MM_CUSTOM_3);
@@ -213,6 +214,8 @@ public class Mp4Tag extends AbstractTag
         tagFieldToMp4Field.put(FieldKey.TONALITY, Mp4FieldKey.TONALITY);
         tagFieldToMp4Field.put(FieldKey.TRACK, Mp4FieldKey.TRACK);
         tagFieldToMp4Field.put(FieldKey.TRACK_TOTAL, Mp4FieldKey.TRACK);
+        tagFieldToMp4Field.put(FieldKey.URL_BANDCAMP_ARTIST_SITE, Mp4FieldKey.URL_BANDCAMP_ARTIST_SITE);
+        tagFieldToMp4Field.put(FieldKey.URL_BANDCAMP_RELEASE_SITE, Mp4FieldKey.URL_BANDCAMP_RELEASE_SITE);
         tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_ARTIST_SITE, Mp4FieldKey.URL_DISCOGS_ARTIST_SITE);
         tagFieldToMp4Field.put(FieldKey.URL_DISCOGS_RELEASE_SITE, Mp4FieldKey.URL_DISCOGS_RELEASE_SITE);
         tagFieldToMp4Field.put(FieldKey.URL_LYRICS_SITE, Mp4FieldKey.URL_LYRICS_SITE);

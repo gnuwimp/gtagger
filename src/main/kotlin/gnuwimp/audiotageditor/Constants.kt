@@ -68,7 +68,7 @@ object Constants {
     const val LABEL_SIZE                  = "Size"
     const val LABEL_START_TRACK           = "Start track"
     const val LABEL_TAB_ALBUM             = "Rename album tags"
-    const val LABEL_TAB_FILE              = "Rename file names"
+    const val LABEL_TAB_FILE              = "Rename filenames"
     const val LABEL_TAB_TITLE             = "Rename title tags"
     const val LABEL_TAB_TRACK             = "Edit tracks"
     const val LABEL_TIME                  = "Time"
@@ -95,6 +95,7 @@ object Constants {
     const val ERROR_SAVE_HTML             = "<html><h3>Error! </h3>Saving tracks failed, check the log what track(s) failed!</html>"
     const val ERROR_SAVING1               = "Error! Saved %d track(s) and %d track(s) failed %s"
     const val ERROR_SAVING2               = "Error! Saved %d track(s) but there were some errors"
+    const val ERROR_SAVING3               = "Error! Failed to save %d tracks"
 
     const val MESSAGE_ASK_CLEAR_HTML      = "<html><h3>Are you sure!</h3>that you want to clear all tags from all selected tracks?</html>"
     const val MESSAGE_ASK_DELETE_HTML     = "<html><h3>Are you sure!</h3>that you want to delete all selected tracks?</html>"
@@ -179,7 +180,7 @@ object Constants {
     fun aboutApp(): String {
         var about = "<html>" +
 
-        "<h2>AudioTagEditor 1.12</h2>" +
+        "<h2>AudioTagEditor 1.12.1</h2>" +
 
         "<h3>About</h3>" +
         "Copyright 2021 - 2024 gnuwimp@gmail.com.<br>" +
@@ -198,7 +199,7 @@ object Constants {
 
         about += "Java: " + System.getProperty("java.version") + "<br>"
         about += "Kotlin: " + KotlinVersion.CURRENT + "<br>"
-        about += "JAudioTagger: 3.01"
+        about += "JAudioTagger: 3.0.2-SNAPSHOT"
         about += "<html>"
 
         return about

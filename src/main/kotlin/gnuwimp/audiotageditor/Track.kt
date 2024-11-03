@@ -493,6 +493,7 @@ class Track(file: File) {
     fun clear() {
         try {
             audio?.tag = audio?.createDefaultTag()
+            audio?.tag?.setValue(FieldKey.ENCODER, "") // jaudiotagger string suddenly appeared.
             changed = true
             save(updateTagsWithUserData = false)
         }
@@ -556,7 +557,7 @@ class Track(file: File) {
     /**
      * Copy tags from string hash to audio tag object.
      * Create new tag to delete all unused tags (for AudiTagEditor) then copy from widgets.
-     * Image has to been extracted first, so it can be reattached.
+     * Image has to be extracted first, so it can be reattached.
      */
     private fun copyUserDataToTag() {
         val art = audio?.tag?.firstArtwork
@@ -595,7 +596,7 @@ class Track(file: File) {
      */
     fun delete(): Boolean {
         return try {
-            audio?.file?.delete() ?: false
+            audio?.file?.delete() == true
         }
         catch (e: Exception) {
             Data.message = e.message ?: ""

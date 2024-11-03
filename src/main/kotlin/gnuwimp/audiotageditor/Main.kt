@@ -9,6 +9,7 @@ import gnuwimp.swing.Swing
 import java.awt.Font
 import java.awt.Image
 import java.awt.Toolkit
+import java.io.IOException
 import javax.swing.JOptionPane
 import javax.swing.SwingUtilities
 import kotlin.system.exitProcess

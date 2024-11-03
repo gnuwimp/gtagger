@@ -118,6 +118,7 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.COPYRIGHT, AsfFieldKey.COPYRIGHT);
         tagFieldToAsfField.put(FieldKey.COUNTRY, AsfFieldKey.COUNTRY);
         tagFieldToAsfField.put(FieldKey.COVER_ART, AsfFieldKey.COVER_ART);
+        tagFieldToAsfField.put(FieldKey.CREDITS, AsfFieldKey.CREDITS);
         tagFieldToAsfField.put(FieldKey.CUSTOM1, AsfFieldKey.CUSTOM1);
         tagFieldToAsfField.put(FieldKey.CUSTOM2, AsfFieldKey.CUSTOM2);
         tagFieldToAsfField.put(FieldKey.CUSTOM3, AsfFieldKey.CUSTOM3);
@@ -250,6 +251,8 @@ public final class AsfTag extends AbstractTag
         tagFieldToAsfField.put(FieldKey.TONALITY, AsfFieldKey.TONALITY);
         tagFieldToAsfField.put(FieldKey.TRACK, AsfFieldKey.TRACK);
         tagFieldToAsfField.put(FieldKey.TRACK_TOTAL, AsfFieldKey.TRACK_TOTAL);
+        tagFieldToAsfField.put(FieldKey.URL_BANDCAMP_ARTIST_SITE, AsfFieldKey.URL_BANDCAMP_ARTIST_SITE);
+        tagFieldToAsfField.put(FieldKey.URL_BANDCAMP_RELEASE_SITE, AsfFieldKey.URL_BANDCAMP_RELEASE_SITE);
         tagFieldToAsfField.put(FieldKey.URL_DISCOGS_ARTIST_SITE, AsfFieldKey.URL_DISCOGS_ARTIST_SITE);
         tagFieldToAsfField.put(FieldKey.URL_DISCOGS_RELEASE_SITE, AsfFieldKey.URL_DISCOGS_RELEASE_SITE);
         tagFieldToAsfField.put(FieldKey.URL_LYRICS_SITE, AsfFieldKey.URL_LYRICS_SITE);

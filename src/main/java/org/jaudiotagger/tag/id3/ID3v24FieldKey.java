@@ -6,6 +6,9 @@ import org.jaudiotagger.tag.id3.framebody.FrameBodyUFID;
 import org.jaudiotagger.tag.id3.framebody.FrameBodyWXXX;
 import org.jaudiotagger.tag.id3.valuepair.StandardIPLSKey;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * List of known id3v24 metadata fields
  *
@@ -47,6 +50,7 @@ public enum ID3v24FieldKey
     COPYRIGHT(ID3v24Frames.FRAME_ID_COPYRIGHTINFO, Id3FieldType.TEXT),
     COUNTRY(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO, FrameBodyTXXX.COUNTRY, Id3FieldType.TEXT),
     COVER_ART(ID3v24Frames.FRAME_ID_ATTACHED_PICTURE, Id3FieldType.BINARY),
+    CREDITS(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO, FrameBodyTXXX.CREDITS, Id3FieldType.TEXT),
     CUSTOM1(ID3v24Frames.FRAME_ID_COMMENT, FrameBodyCOMM.MM_CUSTOM1,Id3FieldType.TEXT),
     CUSTOM2(ID3v24Frames.FRAME_ID_COMMENT, FrameBodyCOMM.MM_CUSTOM2,Id3FieldType.TEXT),
     CUSTOM3(ID3v24Frames.FRAME_ID_COMMENT, FrameBodyCOMM.MM_CUSTOM3,Id3FieldType.TEXT),
@@ -172,6 +176,8 @@ public enum ID3v24FieldKey
     TONALITY(ID3v24Frames.FRAME_ID_USER_DEFINED_INFO, FrameBodyTXXX.TONALITY, Id3FieldType.TEXT),
     TRACK(ID3v24Frames.FRAME_ID_TRACK, Id3FieldType.TEXT),
     TRACK_TOTAL(ID3v24Frames.FRAME_ID_TRACK, Id3FieldType.TEXT),
+    URL_BANDCAMP_ARTIST_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_BANDCAMP_ARTIST_SITE, Id3FieldType.TEXT),
+    URL_BANDCAMP_RELEASE_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_BANDCAMP_RELEASE_SITE, Id3FieldType.TEXT),
     URL_DISCOGS_ARTIST_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_DISCOGS_ARTIST_SITE, Id3FieldType.TEXT),
     URL_DISCOGS_RELEASE_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_DISCOGS_RELEASE_SITE, Id3FieldType.TEXT),
     URL_LYRICS_SITE(ID3v24Frames.FRAME_ID_USER_DEFINED_URL, FrameBodyWXXX.URL_LYRICS_SITE, Id3FieldType.TEXT),
@@ -261,12 +267,34 @@ public enum ID3v24FieldKey
     }
 
     /**
-     * This is the value of the key that can uniquely identifer a key type
+     * This is the value of the key that can uniquely identifier a key type
      *
      * @return
      */
     public String getFieldName()
     {
         return fieldName;
+    }
+
+    static Map<String,ID3v24FieldKey> frameIdFieldKeyMapping = new LinkedHashMap<String,ID3v24FieldKey>();
+
+    static
+    {
+        for(ID3v24FieldKey field:ID3v24FieldKey.values())
+        {
+            if(field.getSubId()!=null)
+            {
+                frameIdFieldKeyMapping.put(field.getFrameId() + field.getSubId(), field);
+            }
+            else
+            {
+                frameIdFieldKeyMapping.put(field.getFrameId(), field);
+            }
+        }
+    }
+
+    public static ID3v24FieldKey getFieldKeyFromFrameId(String frameId)
+    {
+        return frameIdFieldKeyMapping.get(frameId);
     }
 }

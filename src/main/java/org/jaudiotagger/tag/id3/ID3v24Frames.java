@@ -413,6 +413,7 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.COPYRIGHT, ID3v24FieldKey.COPYRIGHT);
         tagFieldToId3.put(FieldKey.COUNTRY, ID3v24FieldKey.COUNTRY);
         tagFieldToId3.put(FieldKey.COVER_ART, ID3v24FieldKey.COVER_ART);
+        tagFieldToId3.put(FieldKey.CREDITS, ID3v24FieldKey.CREDITS);
         tagFieldToId3.put(FieldKey.CUSTOM1, ID3v24FieldKey.CUSTOM1);
         tagFieldToId3.put(FieldKey.CUSTOM2, ID3v24FieldKey.CUSTOM2);
         tagFieldToId3.put(FieldKey.CUSTOM3, ID3v24FieldKey.CUSTOM3);
@@ -534,6 +535,8 @@ public class ID3v24Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.TONALITY, ID3v24FieldKey.TONALITY);
         tagFieldToId3.put(FieldKey.TRACK, ID3v24FieldKey.TRACK);
         tagFieldToId3.put(FieldKey.TRACK_TOTAL, ID3v24FieldKey.TRACK_TOTAL);
+        tagFieldToId3.put(FieldKey.URL_BANDCAMP_ARTIST_SITE, ID3v24FieldKey.URL_BANDCAMP_ARTIST_SITE);
+        tagFieldToId3.put(FieldKey.URL_BANDCAMP_RELEASE_SITE, ID3v24FieldKey.URL_BANDCAMP_RELEASE_SITE);
         tagFieldToId3.put(FieldKey.URL_DISCOGS_ARTIST_SITE, ID3v24FieldKey.URL_DISCOGS_ARTIST_SITE);
         tagFieldToId3.put(FieldKey.URL_DISCOGS_RELEASE_SITE, ID3v24FieldKey.URL_DISCOGS_RELEASE_SITE);
         tagFieldToId3.put(FieldKey.URL_LYRICS_SITE, ID3v24FieldKey.URL_LYRICS_SITE);
