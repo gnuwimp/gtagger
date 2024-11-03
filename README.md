@@ -7,10 +7,11 @@ And also do batch operations on selected tracks.
 
 AudioTagEditor is written in kotlin and released under the [GNU General Public License v3.0](LICENSE).  
 You will need [Java](http://java.com) installed to run this program.  
+Tested with java 21 and 23.  
 
 ## Download
 Download AudioTagEditor from [here](https://github.com/gnuwimp/AudioTagEditor/releases).  
-[Java](https://java.com) is needed. Tested with version 21 and 23. 
+Download Java from [here](https://java.com).  
 
 ## Usage
 Double-click on the jar file to start the program in windows.  
