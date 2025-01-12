@@ -23,6 +23,8 @@ AudioConverter has been tested on Windows 10 and Ubuntu 24.10.
 
 ## Changes
 <pre>
+1.12.2: minor fixes and updated Jaudiotagger library
+
 1.12.1: minor bug fix and updated Jaudiotagger library
 
 1.12:   tags that are not used in AudioTagEditor are now removed when saving tags to audio file
