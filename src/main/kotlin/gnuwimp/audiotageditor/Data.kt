@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 - 2024 gnuwimp@gmail.com
+ * Copyright 2021 - 2025 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -316,10 +316,10 @@ object Data {
 
         if (tasks.isNotEmpty()) {
             val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
-            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_LOAD, parent = Main.window)
+            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_LOAD, parent = Main.window, height = Swing.defFont.size * 22)
 
             dialog.enableCancel = true
-            dialog.start()
+            dialog.start(messages = Constants.THREADS)
 
             val stat = Constants.MESSAGE_TIME.format("${ System.currentTimeMillis() - start}")
 
@@ -516,10 +516,10 @@ object Data {
 
         if (tasks.isNotEmpty() == true) {
             val manager = TaskManager(tasks = tasks, threadCount = Constants.THREADS, onError = TaskManager.Execution.CONTINUE, onCancel = TaskManager.Execution.STOP_JOIN)
-            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_SAVE, parent = Main.window)
+            val dialog  = TaskDialog(taskManager = manager, type = TaskDialog.Type.PERCENT, title = Constants.DIALOG_TITLE_SAVE, parent = Main.window, height = Swing.defFont.size * 22)
 
             dialog.enableCancel = true
-            dialog.start()
+            dialog.start(messages = Constants.THREADS)
 
             val stat = Constants.MESSAGE_TIME.format("${System.currentTimeMillis() - start}")
             val row  = selectedRow

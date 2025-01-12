@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 - 2024 gnuwimp@gmail.com
+ * Copyright 2021 - 2025 gnuwimp@gmail.com
  * Released under the GNU General Public License v3.0
  */
 
@@ -174,16 +174,16 @@ object Constants {
     const val NO                          = 1
     const val CANCEL                      = 2
     const val ICON_SIZE                   = 180
-    const val THREADS                     = 4
+    const val THREADS                     = 8
 
     //----------------------------------------------------------------------
     fun aboutApp(): String {
         var about = "<html>" +
 
-        "<h2>AudioTagEditor 1.12.1</h2>" +
+        "<h2>AudioTagEditor 1.12.2</h2>" +
 
         "<h3>About</h3>" +
-        "Copyright 2021 - 2024 gnuwimp@gmail.com.<br>" +
+        "Copyright 2021 - 2025 gnuwimp@gmail.com.<br>" +
         "Released under the GNU General Public License v3.0.<br>" +
         "See: <a href=\"https://github.com/gnuwimp/AudioTagEditor\">https://github.com/gnuwimp/AudioTagEditor</a><br>" +
         "<br>" +

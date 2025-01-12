@@ -396,6 +396,10 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.ARTISTS, ID3v23FieldKey.ARTISTS);
         tagFieldToId3.put(FieldKey.ARTISTS_SORT, ID3v23FieldKey.ARTISTS_SORT);
         tagFieldToId3.put(FieldKey.ARTIST_SORT, ID3v23FieldKey.ARTIST_SORT);
+        tagFieldToId3.put(FieldKey.AUDIO_ENGINEER, ID3v23FieldKey.AUDIO_ENGINEER);
+        tagFieldToId3.put(FieldKey.AUDIO_ENGINEER_SORT, ID3v23FieldKey.AUDIO_ENGINEER_SORT);
+        tagFieldToId3.put(FieldKey.BALANCE_ENGINEER, ID3v23FieldKey.BALANCE_ENGINEER);
+        tagFieldToId3.put(FieldKey.BALANCE_ENGINEER_SORT, ID3v23FieldKey.BALANCE_ENGINEER_SORT);
         tagFieldToId3.put(FieldKey.BARCODE, ID3v23FieldKey.BARCODE);
         tagFieldToId3.put(FieldKey.BPM, ID3v23FieldKey.BPM);
         tagFieldToId3.put(FieldKey.CATALOG_NO, ID3v23FieldKey.CATALOG_NO);
@@ -450,6 +454,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.LYRICIST, ID3v23FieldKey.LYRICIST);
         tagFieldToId3.put(FieldKey.LYRICIST_SORT, ID3v23FieldKey.LYRICIST_SORT);
         tagFieldToId3.put(FieldKey.LYRICS, ID3v23FieldKey.LYRICS);
+        tagFieldToId3.put(FieldKey.MASTERING, ID3v23FieldKey.MASTERING);
+        tagFieldToId3.put(FieldKey.MASTERING_SORT, ID3v23FieldKey.MASTERING_SORT);
         tagFieldToId3.put(FieldKey.MEDIA, ID3v23FieldKey.MEDIA);
         tagFieldToId3.put(FieldKey.MIXER, ID3v23FieldKey.MIXER);
         tagFieldToId3.put(FieldKey.MIXER_SORT, ID3v23FieldKey.MIXER_SORT);
@@ -510,6 +516,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.QUALITY, ID3v23FieldKey.QUALITY);
         tagFieldToId3.put(FieldKey.RANKING, ID3v23FieldKey.RANKING);
         tagFieldToId3.put(FieldKey.RATING, ID3v23FieldKey.RATING);
+        tagFieldToId3.put(FieldKey.RECORDING_ENGINEER, ID3v23FieldKey.RECORDING_ENGINEER);
+        tagFieldToId3.put(FieldKey.RECORDING_ENGINEER_SORT, ID3v23FieldKey.RECORDING_ENGINEER_SORT);
         tagFieldToId3.put(FieldKey.RECORD_LABEL, ID3v23FieldKey.RECORD_LABEL);
         tagFieldToId3.put(FieldKey.RECORDINGDATE, ID3v23FieldKey.RECORDINGDATE);
         tagFieldToId3.put(FieldKey.RECORDINGSTARTDATE, ID3v23FieldKey.RECORDINGSTARTDATE);
@@ -522,6 +530,8 @@ public class ID3v23Frames extends ID3Frames
         tagFieldToId3.put(FieldKey.SECTION, ID3v23FieldKey.SECTION);
         tagFieldToId3.put(FieldKey.SINGLE_DISC_TRACK_NO, ID3v23FieldKey.SINGLE_DISC_TRACK_NO);
         tagFieldToId3.put(FieldKey.SONGKONG_ID, ID3v23FieldKey.SONGKONG_ID);
+        tagFieldToId3.put(FieldKey.SOUND_ENGINEER, ID3v23FieldKey.SOUND_ENGINEER);
+        tagFieldToId3.put(FieldKey.SOUND_ENGINEER_SORT, ID3v23FieldKey.SOUND_ENGINEER_SORT);
         tagFieldToId3.put(FieldKey.SUBTITLE, ID3v23FieldKey.SUBTITLE);
         tagFieldToId3.put(FieldKey.TAGS, ID3v23FieldKey.TAGS);
         tagFieldToId3.put(FieldKey.TEMPO, ID3v23FieldKey.TEMPO);
